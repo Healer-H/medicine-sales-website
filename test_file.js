@@ -3,4 +3,5 @@ function ...
  Get the current directory name 
  The  __dirname  variable is used to get the current directory name of the file.
 
- 
+
+add some edit on test_file.js
