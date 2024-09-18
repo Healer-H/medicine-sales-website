@@ -1,1 +1,1 @@
-cout << "something"
+cout <<  "correct"
