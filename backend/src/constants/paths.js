@@ -11,6 +11,12 @@ const Path = {
     ForgotPassword: '/forgot-password',
     ResetPassword: '/reset-password',
   },
+  Product: {
+    Base: '/products',
+    Id: '/:id',
+    Add: '/add',
+    All: '/all',
+  },
 }
 
 module.exports = Path

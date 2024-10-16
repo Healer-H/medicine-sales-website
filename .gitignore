@@ -38,6 +38,7 @@ temp/
 .npm
 
 # Optional REACT_APP environment variable file
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -46,3 +47,4 @@ temp/
 # Miscellaneous
 .DS_Store
 *.pem
+backend/package-lock.json
