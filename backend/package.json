@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon --inspect src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "beautiful": "prettier --single-quote --trailing-comma all --tab-width 4 --write --no-semi 'src/*/*.{js,json,html}'"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "lint-staged": {
+    "src/*/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "handlebars": "^4.7.8",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3",
+    "nodemailer": "^6.9.15",
+    "otplib": "^12.0.1",
+    "sequelize": "^6.37.4",
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3"
+  }
+}
