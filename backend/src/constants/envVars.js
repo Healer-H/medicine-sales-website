@@ -6,7 +6,8 @@ dotenv.config({ path: Path.resolve(__dirname, `../../env/${envFile}`) })
 
 const EnvVars =  {
     NodeEnv: (process.env.NODE_ENV || ''),
-    Port: (process.env.PORT || 0),
+    Host: (process.env.HOST),
+    Port: (process.env.PORT || 3000),
     CookieProps: {
       Key: 'ExpressGeneratorTs',
       Secret: (process.env.COOKIE_SECRET || ''),
