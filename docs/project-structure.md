@@ -1,50 +1,52 @@
 ### **Cấu trúc thư mục tổng quan:**
 ```
+```
 medicine-sales-website/
-├── backend/                      # Thư mục chính cho backend
-│   ├── env/                      # Các tệp cấu hình môi trường
-│   │   ├── development.env       # Biến môi trường cho phát triển
-│   │   └── production.env        # Biến môi trường cho sản xuất
-│   ├── spec/                     # Các tệp kiểm thử và báo cáo
-│   │   ├── config/               # Cấu hình kiểm thử
-│   │   ├── reports/              # Lưu trữ báo cáo kiểm thử
-│   │   └── tests/                # Các tệp kiểm thử cho dự án
-│   ├── src/                      # Thư mục mã nguồn chính
-│   │   ├── config/               # Cấu hình ứng dụng
-│   │   ├── constants/            # Các hằng số của ứng dụng
-│   │   │   ├── envVars.js        # Hằng số biến môi trường
-│   │   │   ├── httpStatusCodes.js# Hằng số mã trạng thái HTTP
-│   │   │   ├── messages.js       # Hằng số thông báo
-│   │   │   └── paths.js          # Hằng số liên quan đến đường dẫn
-│   │   ├── controllers/          # Các bộ điều khiển xử lý yêu cầu từ client
-│   │   ├── middlewares/          # Các middleware xử lý trước khi đến controller
-│   │   ├── models/               # Các mô hình dữ liệu
-│   │   ├── routes/               # Các tuyến đường của ứng dụng
-│   │   ├── services/             # Các dịch vụ logic của ứng dụng
-│   │   ├── utils/                # Các tiện ích chung
-│   │   ├── index.js              # Điểm vào của ứng dụng
-│   │   └── server.js             # Cấu hình và khởi động server
-│   ├── .eslintignore             # Các tệp và thư mục bị ESLint bỏ qua
-│   ├── .prettierignore           # Các tệp và thư mục bị Prettier bỏ qua
-│   ├── .prettierrc.yml           # Cấu hình Prettier
-│   ├── package-lock.json         # Tệp khóa phiên bản gói (tự động tạo)
-│   └── package.json              # Thông tin dự án và các phụ thuộc
+├── backend/                      # Main directory for backend
+│   ├── env/                      # Environment configuration files
+│   │   ├── development.env       # Environment variables for development
+│   │   └── production.env        # Environment variables for production
+│   ├── spec/                     # Test and report files
+│   │   ├── config/               # Test configuration
+│   │   ├── reports/              # Test report storage
+│   │   └── tests/                # Test files for the project
+│   ├── src/                      # Main source code directory
+│   │   ├── config/               # Application configuration
+│   │   ├── constants/            # Application constants
+│   │   │   ├── envVars.js        # Environment variable constants
+│   │   │   ├── httpStatusCodes.js# HTTP status code constants
+│   │   │   ├── messages.js       # Message constants
+│   │   │   └── paths.js          # Path-related constants
+│   │   ├── controllers/          # Controllers handling client requests
+│   │   ├── middlewares/          # Middlewares processing before reaching controllers
+│   │   ├── models/               # Data models
+│   │   ├── routes/               # Application routes
+│   │   ├── services/             # Application logic services
+│   │   ├── utils/                # General utilities
+│   │   ├── index.js              # Application entry point
+│   │   └── server.js             # Server configuration and startup
+│   ├── .eslintignore             # Files and directories ignored by ESLint
+│   ├── .prettierignore           # Files and directories ignored by Prettier
+│   ├── .prettierrc.yml           # Prettier configuration
+│   ├── package-lock.json         # Package version lock file (auto-generated)
+│   └── package.json              # Project information and dependencies
 ├── frontend/
-│   ├── public/                   # Tài nguyên tĩnh như hình ảnh, biểu tượng, và index.html
-│   ├── src/                      # Thư mục mã nguồn chính cho React
-│   │   ├── components/           # Các thành phần React có thể tái sử dụng
-│   │   ├── pages/                # Các trang chính của ứng dụng
-│   │   ├── assets/               # Tài nguyên tĩnh như hình ảnh và video
-│   │   ├── hooks/                # Các hook tùy chỉnh của React
-│   │   ├── services/             # Các dịch vụ API để giao tiếp với backend
-│   │   ├── contexts/             # Các context của React để quản lý state toàn cục
-│   │   ├── utils/                # Các hàm tiện ích
-│   │   ├── styles/               # Các tệp CSS hoặc SCSS
-│   │   ├── store/                # Các tệp quản lý state (ví dụ: Redux)
-│   │   └── App.js                # Tệp chính của ứng dụng React
-│   └── package.json              # Thông tin dự án và các phụ thuộc
-├── docs/                         # Tài liệu
-└── README.md                     # Hướng dẫn thiết lập và chạy dự án
+│   ├── public/                   # Static resources like images, icons, and index.html
+│   ├── src/                      # Main source code directory for React
+│   │   ├── components/           # Reusable React components
+│   │   ├── pages/                # Main application pages
+│   │   ├── assets/               # Static resources like images and videos
+│   │   ├── hooks/                # Custom React hooks
+│   │   ├── services/             # API services for backend communication
+│   │   ├── contexts/             # React contexts for global state management
+│   │   ├── utils/                # Utility functions
+│   │   ├── styles/               # CSS or SCSS files
+│   │   ├── store/                # State management files (e.g., Redux)
+│   │   └── App.js                # Main React application file
+│   └── package.json              # Project information and dependencies
+├── docs/                         # Documentation
+└── README.md                     # Setup and run instructions for the project
+```
 
 ### **Cấu trúc thư mục chi tiết:**
 
