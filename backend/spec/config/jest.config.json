@@ -1,0 +1,13 @@
+{
+  "testEnvironment": "node",
+  "testMatch": ["**/*.spec.js", "**/*.test.js"],
+  "testPathIgnorePatterns": ["/node_modules/"],
+  "collectCoverage": true,
+  "coverageReporters": ["text", "html"],
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx}",
+    "!src/**/*.test.js"
+  ],
+  "coverageDirectory": "/spec/reports/coverage",
+  "verbose": true
+}
