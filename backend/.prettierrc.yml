@@ -1,9 +1,11 @@
-printWidth: 100
-tabWidth: 2
-singleQuote: true
-semi: false
-jsxSingleQuote: true
-quoteProps: as-needed
-trailingComma: none
-bracketSpacing: true
-bracketSameLine: false
+singleQuote: true               # Sử dụng dấu nháy đơn cho chuỗi
+trailingComma: "all"            # Thêm dấu phẩy ở cuối các phần tử của object, array, parameters
+semi: false                     # Không dùng dấu chấm phẩy cuối dòng
+tabWidth: 2                     # Số khoảng trắng cho mỗi tab
+useTabs: false                  # Không dùng tab, dùng khoảng trắng
+printWidth: 80                  # Giới hạn độ dài dòng
+bracketSpacing: true            # Có dấu cách trong object literals
+arrowParens: "avoid"            # Không dùng ngoặc đơn nếu arrow function có một tham số
+endOfLine: "lf"                 # Sử dụng LF cho dấu xuống dòng (hợp với các hệ điều hành)
+proseWrap: "preserve"           # Giữ nguyên khoảng trắng
+htmlWhitespaceSensitivity: "ignore" # Để Prettier bỏ qua khoảng trắng trong HTML

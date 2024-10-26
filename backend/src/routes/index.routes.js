@@ -1,17 +1,17 @@
-const Path = require('../constants/Paths')
-const ErrorHandler = require('../middlewares/errorHandler.middleware')
+const Path = require('../constants/paths')
+const ErrorHandler = require('../middlewares/errorHandler.middlewares')
+const userRoute = require('./user.routes')
 
+const Router = app => {
+  // Route user
+  app.use(Path.User.Base, userRoute)
 
-const Router = (app) => {
-    // Import router ở đây
-    
-    app.get(Path.Empty, (req, res) => {
-        res.send('Welcome to the medicine center!')
-    })
+  app.get(Path.Empty, (req, res) => {
+    res.send('Welcome to the medicine center!')
+  })
 
-    // middleware error handler: cần để sau cùng các route để nhận các lỗi được next từ các controller
-    app.use(ErrorHandler)
-    
+  // middleware error handler: cần để sau cùng các route để nhận các lỗi được next từ các controller
+  app.use(ErrorHandler)
 }
 
 module.exports = Router
