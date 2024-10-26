@@ -1,14 +1,14 @@
 const { sequelize } = require('../config/database.configs')
-const User = require('./user.model')
-const Token = require('./token.model')
+
+// Import các model
 const Product = require('./product.model')
+// Import các model khác nếu có
+// const User = require('./user');
+// const Order = require('./order');
 
 // Thiết lập các mối quan hệ giữa các model
 // Ví dụ: Product.belongsTo(User);
 // User.hasMany(Product);
-
-// Thiết lập quan hệ giữa các model đã được định nghĩa trong từng file riêng lẻ
-// Nếu có quan hệ phức tạp hơn, có thể định nghĩa ở đây
 
 // Đồng bộ các model với cơ sở dữ liệu
 const syncModels = async () => {
@@ -21,9 +21,10 @@ const syncModels = async () => {
 }
 
 module.exports = {
-  User,
-  Token,
-  Product,
+  sequelize,
   syncModels,
+  Product
+  // Export các model khác nếu có
+  // User,
+  // Order,
 }
-

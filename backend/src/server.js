@@ -5,7 +5,7 @@ const serverConfig = require('./config/server.configs')
 const routerConfig = require('./routes/index.routes')
 
 const app = express()
-require("dotenv").config();
+require('dotenv').config()
 
 // Server configuration
 serverConfig(app)
@@ -20,9 +20,3 @@ syncModels()
 routerConfig(app)
 
 module.exports = app
-
-// Khởi động server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
