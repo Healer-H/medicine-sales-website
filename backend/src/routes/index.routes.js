@@ -1,7 +1,7 @@
 const Path = require('../constants/paths')
 const ErrorHandler = require('../middlewares/errorHandler.middlewares')
 const userRoute = require('./user.routes')
-const productRoutes = require('./productRoutes'); 
+const productRoutes = require('./product.routes'); 
 
 
 const Router = app => {

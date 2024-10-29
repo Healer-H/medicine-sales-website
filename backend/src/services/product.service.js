@@ -1,6 +1,6 @@
 // services/productService.js
 const Product = require('../models/product.model')
-
+const Messages = require('../constants/messages')
 class ProductService {
   // Thêm sản phẩm mới
   async addProduct(productData) {
@@ -17,7 +17,10 @@ class ProductService {
     try {
       const product = await Product.findByPk(productId)
       if (!product) {
-        throw new Error('Product not found')
+        return {
+          success: false,
+          message: Messages.PRODUCTS_MESSAGES.GET.NOT_FOUND,
+        }
       }
       return product
     } catch (error) {

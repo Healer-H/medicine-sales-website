@@ -67,7 +67,29 @@ const SERVERS_MESSAGES = {
   SESSION_NOT_ACTIVE: 'Session not active',
 }
 
+
+const PRODUCTS_MESSAGES = {
+  CREATE: {
+    SUCCESS: 'Sản phẩm đã được tạo thành công.',
+    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+  },
+  UPDATE: {
+    SUCCESS: 'Sản phẩm đã được cập nhật thành công.',
+    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+    NOT_FOUND: 'Sản phẩm không tồn tại.',
+  },
+  DELETE: {
+    SUCCESS: 'Sản phẩm đã được xóa thành công.',
+    NOT_FOUND: 'Sản phẩm không tồn tại.',
+  },
+  GET: {
+    SUCCESS: 'Danh sách sản phẩm.',
+    NOT_FOUND: 'Không tìm thấy sản phẩm.',
+  },
+}
+
 module.exports = {
   USERS_MESSAGES,
   SERVERS_MESSAGES,
+  PRODUCTS_MESSAGES,
 }
