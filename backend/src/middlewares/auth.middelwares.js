@@ -7,7 +7,7 @@ const authentication = async (req, res, next) => {
   // Check token header
   const token = req.headers['authorization']?.split(' ')[1]
   if (!token) {
-    return res.status(401).json({
+    return res.status(HttpStatusCodes.UNAUTHORIZED).json({
       message: Messages.USERS_MESSAGES.TOKEN.NOT_PROVIDED,
     })
   }
