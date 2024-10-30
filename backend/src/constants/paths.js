@@ -16,6 +16,7 @@ const Path = {
     Id: '/:id',
     Add: '/add',
     All: '/all',
+    Update: '/update/:id',
   },
 }
 

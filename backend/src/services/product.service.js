@@ -37,6 +37,27 @@ class ProductService {
       throw new Error('Error while retrieving products: ' + error.message)
     }
   }
+
+  // Cập nhật sản phẩm
+  async updateProduct(productId, productData) {
+    try {
+      const product = await Product.findByPk(productId)
+      if (!product) {
+        return {
+          success: false,
+          message: Messages.PRODUCTS_MESSAGES.UPDATE.NOT_FOUND,
+        }
+      }
+      await product.update(productData)
+      return {
+        success: true,
+        message: Messages.PRODUCTS_MESSAGES.UPDATE.SUCCESS,
+        product,
+      }
+    } catch (error) {
+      throw new Error('Error while updating product: ' + error.message)
+    }
+  }
 }
 
 module.exports = new ProductService()

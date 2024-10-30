@@ -156,4 +156,78 @@ router.get(Path.Product.All, ProductController.getAllProducts)
  */
 router.get(Path.Product.Id, ProductController.getProductById)
 
+/**
+ * @swagger
+ * /products/update/{id}:
+ *   put:
+ *     summary: Cập nhật sản phẩm
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID của sản phẩm
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Tên sản phẩm
+ *                 example: "Product Name"
+ *               price:
+ *                 type: number
+ *                 description: Giá sản phẩm
+ *                 example: 100
+ *               description:
+ *                 type: string
+ *                 description: Mô tả sản phẩm
+ *                 example: "Product Description"
+ *               stock:
+ *                 type: number
+ *                 description: Số lượng sản phẩm
+ *                 example: 100
+ *               expiration_date:
+ *                 type: string
+ *                 format: date
+ *                 description: Ngày hết hạn
+ *               prescription_required:
+ *                 type: boolean
+ *                 description: Cần đơn thuốc
+ *     responses:
+ *       200:
+ *         description: Sản phẩm đã được cập nhật
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: ID của sản phẩm
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   description: Tên sản phẩm
+ *                   example: "Product Name"
+ *                 price:
+ *                   type: number
+ *                   description: Giá sản phẩm
+ *                   example: 100
+ *                 description:
+ *                   type: string
+ *                   description: Mô tả sản phẩm
+ *                   example: "Product Description"
+ *       404:
+ *         description: Không tìm thấy sản phẩm
+ *       500:
+ *         description: Lỗi khi cập nhật sản phẩm
+ */
+router.put(Path.Product.Update, ProductController.updateProduct)
+
 module.exports = router

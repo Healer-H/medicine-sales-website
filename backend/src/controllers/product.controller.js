@@ -35,6 +35,21 @@ class ProductController {
       next(error)
     }
   }
+
+  // Cập nhật sản phẩm
+  async updateProduct(req, res, next) {
+    try {
+      const productId = req.params.id 
+      const productData = req.body 
+      const response = await ProductService.updateProduct(productId, productData) 
+      if (!response.success) {
+        return res.status(HttpStatusCodes.NOT_FOUND).json({ message: response.message })
+      }
+      return res.status(HttpStatusCodes.OK).json(response.product) 
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = new ProductController()
