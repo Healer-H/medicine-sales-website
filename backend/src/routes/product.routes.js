@@ -158,7 +158,7 @@ router.get(Path.Product.Id, ProductController.getProductById)
 
 /**
  * @swagger
- * /products/update/{id}:
+ * /products/{id}:
  *   put:
  *     summary: Cập nhật sản phẩm
  *     tags: [Products]
