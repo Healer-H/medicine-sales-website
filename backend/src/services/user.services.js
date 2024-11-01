@@ -10,7 +10,7 @@ const MAX_ATTEMPTS = parseInt(EnvVars.Otp.MaxAttempts)
 let otpAttempsCache = new Map()
 
 class userServices {
-  // Sigin Service
+  // Login Service
   async login(email, password) {
     try {
       //Find user
@@ -34,7 +34,7 @@ class userServices {
       return {
         success: true,
         message: Messages.USERS_MESSAGES.LOGIN.SUCCESS,
-        acces_token: token,
+        access_token: token,
         user: {
           id: user.id,
           email: user.email,
@@ -124,6 +124,138 @@ class userServices {
       }
     } catch (error) {
       throw new Error(`Reset password service error: ${error}`)
+    }
+  }
+
+  async getAllUser() {
+    try {
+      const users = await User.findAll({
+        attributes: { exclude: ['password'] },
+      })
+      return users
+    } catch (error) {
+      throw new Error(`Get all user service error: ${error}`)
+    }
+  }
+
+  async createUser(userData) {
+    try {
+      const { email, password, ...userInfo } = userData
+      const isUserExist = await User.findOne({ where: { email } })
+      if (isUserExist) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.CREATE.EMAIL_EXIST,
+        }
+      }
+
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+      const user = await User.create({
+        email,
+        password: hashedPassword,
+        ...userInfo,
+      })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.CREATE.SUCCESS,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
+      }
+    } catch (error) {
+      throw new Error(`Create user service error: ${error}`)
+    }
+  }
+
+  async detailUser(id) {
+    try {
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ['password'] },
+      })
+      if (!user) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.GET.NOT_FOUND,
+        }
+      }
+      return {
+        success: true,
+        user,
+      }
+    } catch (error) {
+      throw new Error(`Detail user service error: ${error}`)
+    }
+  }
+
+  async deleteUser(id) {
+    try {
+      const user = await User.findByPk(id)
+      if (!user) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.DELETE.NOT_FOUND,
+        }
+      }
+      await User.destroy({ where: { id } })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete user service error: ${error}`)
+    }
+  }
+
+  async putUser(id, userData) {
+    try {
+      // Lấy danh sách các trường của model User
+      const requiredFeilds = Object.keys(User.getAttributes())
+
+      // Kiểm tra nếu thiếu bất kỳ trường nào trong req.body
+      const isMissingField = requiredFeilds.some(field => !userData[field])
+      if (isMissingField) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.REQUIRED_FIELDS,
+        }
+      }
+
+      const user = await User.findByPk(id)
+      if (!user) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.NOT_FOUND,
+        }
+      }
+      await user.update({ ...userData })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Update user service error: ${error}`)
+    }
+  }
+
+  async patchUser(id, userData) {
+    try {
+      const user = await User.findByPk(id)
+      if (!user) {
+        return {
+          success: false,
+          message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.NOT_FOUND,
+        }
+      }
+
+      await user.update({ ...userData })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Patch user service error: ${error}`)
     }
   }
 }
