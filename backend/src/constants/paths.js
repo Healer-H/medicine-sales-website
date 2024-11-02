@@ -18,6 +18,15 @@ const Path = {
     All: '/all',
     Update: '/:id',
   },
+  Admin: {
+    Base: '/admin',
+    GetAllUser: '/users',
+    CreateUser: '/users',
+    DetailUser: '/user/:id',
+    PutUser: '/user/:id',
+    PatchUser: '/user/:id',
+    DeleteUser: '/user/:id',
+  },
 }
 
 module.exports = Path

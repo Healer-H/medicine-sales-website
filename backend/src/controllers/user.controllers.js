@@ -12,8 +12,7 @@ class UserControllers {
 
       if (!response.success)
         return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
-
-      res.cookie('access_token', response.acces_token, Cookie.Options)
+      res.cookie('access_token', response.access_token, Cookie.Options)
       res.status(HttpStatusCodes.OK).json({
         message: response.message,
         access_token: response.access_token,
@@ -55,6 +54,76 @@ class UserControllers {
       if (response.success)
         return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
       res.status(HttpStatusCodes.OK).json({ message: response.message })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getAllUser(req, res, next) {
+    try {
+      const users = await userServices.getAllUser()
+      return res.status(HttpStatusCodes.OK).json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async createUser(req, res, next) {
+    try {
+      const response = await userServices.createUser(req.body)
+      if (!response.success)
+        return res.status(HttpStatusCodes.BAD_REQUEST).json(response.message)
+      res
+        .status(HttpStatusCodes.CREATED)
+        .json({ message: response.message, user: response.user })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getUserDetail(req, res, next) {
+    try {
+      const id = req.params.id
+      const response = await userServices.getUserDetail(id)
+      if (!response.success)
+        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
+      res.status(HttpStatusCodes.OK).json(response.user)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deleteUser(req, res, next) {
+    try {
+      const id = req.params.id
+      const response = await userServices.deleteUser(id)
+      if (!response.success)
+        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
+      res.status(HttpStatusCodes.OK).json(response.message)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async putUser(req, res, next) {
+    try {
+      const id = req.params.id
+      const response = await userServices.putUser(id, req.body)
+      if (!response.success)
+        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
+      res.status(HttpStatusCodes.OK).json(response.message)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async patchUser(req, res, next) {
+    try {
+      const id = req.params.id
+      const response = await userServices.patchUser(id, req.body)
+      if (!response.success)
+        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
+      res.status(HttpStatusCodes.OK).json(response.message)
     } catch (error) {
       next(error)
     }

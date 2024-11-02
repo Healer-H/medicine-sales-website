@@ -1,10 +1,25 @@
 const USERS_MESSAGES = {
-  ADMIN_CREATE: {
-    SUCCESS: 'Tạo người dùng thành công.',
-    EMAIL_TAKEN: 'Địa chỉ email đã được sử dụng.',
-    WEAK_PASSWORD: 'Mật khẩu không đủ mạnh.',
-    PASSWORD_MISMATCH: 'Mật khẩu và xác nhận mật khẩu không khớp.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+  ADMIN: {
+    USER: {
+      CREATE: {
+        SUCCESS: 'Người dùng đã được tạo thành công.',
+        EMAIL_EXIST: 'Email đã tồn tại. Vui lòng sử dụng email khác',
+      },
+      UPDATE: {
+        SUCCESS: 'Người dùng đã được cập nhật thành công.',
+        EMAIL_EXIST: 'Email đã tồn tại.',
+        NOT_FOUND: 'Người dùng không tồn tại.',
+        REQUIRED_FIELDS: 'Thiếu thông trường thông tin cần thiết để sửa.',
+      },
+      DELETE: {
+        SUCCESS: 'Người dùng đã được xóa thành công.',
+        NOT_FOUND: 'Người dùng không tồn tại.',
+      },
+      GET: {
+        SUCCESS: 'Danh sách người dùng.',
+        NOT_FOUND: 'Không tìm thấy người dùng.',
+      },
+    },
   },
   LOGIN: {
     SUCCESS: 'Đăng nhập thành công.',
@@ -12,7 +27,6 @@ const USERS_MESSAGES = {
     ACCOUNT_NOT_FOUND: 'Tài khoản không tồn tại.',
     ACCOUNT_NOT_VERIFIED: 'Tài khoản chưa xác thực.',
     ACCOUNT_LOCKED: 'Tài khoản đã bị khóa.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
   },
   LOGOUT: {
     SUCCESS: 'Đăng xuất thành công.',
@@ -22,12 +36,10 @@ const USERS_MESSAGES = {
   FORGOT_PASSWORD: {
     SUCCESS: 'Mã OTP đã được gửi đến email',
     EMAIL_NOT_FOUND: 'Địa chỉ email không tồn tại.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
   },
   RESET_PASSWORD: {
     SUCCESS: 'Mật khẩu đã được đặt lại thành công.',
     PASSWORD_MISMATCH: 'Các mật khẩu không khớp.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
   },
   OTP: {
     SUCCESS: 'OTP hợp lệ.',
@@ -67,15 +79,12 @@ const SERVERS_MESSAGES = {
   SESSION_NOT_ACTIVE: 'Session not active',
 }
 
-
 const PRODUCTS_MESSAGES = {
   CREATE: {
     SUCCESS: 'Sản phẩm đã được tạo thành công.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
   },
   UPDATE: {
     SUCCESS: 'Sản phẩm đã được cập nhật thành công.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
     NOT_FOUND: 'Sản phẩm không tồn tại.',
   },
   DELETE: {
