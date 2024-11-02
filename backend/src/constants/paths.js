@@ -17,6 +17,7 @@ const Path = {
     Add: '/add',
     All: '/all',
     Update: '/:id',
+    Search: '/search',
   },
   Admin: {
     Base: '/admin',
@@ -26,6 +27,10 @@ const Path = {
     PutUser: '/user/:id',
     PatchUser: '/user/:id',
     DeleteUser: '/user/:id',
+  },
+  Order: {
+    Base: '/orders',
+    AddProductToOrder: '/add-product-to-order',
   },
 }
 

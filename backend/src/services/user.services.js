@@ -9,7 +9,7 @@ const SALT_ROUNDS = parseInt(EnvVars.Bcrypt.SaltRounds)
 const MAX_ATTEMPTS = parseInt(EnvVars.Otp.MaxAttempts)
 let otpAttempsCache = new Map()
 
-class userServices {
+class UserServices {
   // Login Service
   async login(email, password) {
     try {
@@ -260,4 +260,4 @@ class userServices {
   }
 }
 
-module.exports = new userServices()
+module.exports = new UserServices()

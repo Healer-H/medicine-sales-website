@@ -97,8 +97,41 @@ const PRODUCTS_MESSAGES = {
   },
 }
 
+const ORDERS_MESSAGES = {
+  CREATE: {
+    SUCCESS: 'Đơn hàng đã được tạo thành công.',
+    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+  },
+  UPDATE: {
+    SUCCESS: 'Đơn hàng đã được cập nhật thành công.',
+    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+    NOT_FOUND: 'Đơn hàng không tồn tại.',
+  },
+  DELETE: {
+    SUCCESS: 'Đơn hàng đã được xóa thành công.',
+    NOT_FOUND: 'Đơn hàng không tồn tại.',
+  },
+  GET: {
+    SUCCESS: 'Danh sách đơn hàng.',
+    NOT_FOUND: 'Không tìm thấy đơn hàng.',
+  },
+  SEARCH: {
+    SUCCESS: 'Danh sách đơn hàng tìm kiếm.',
+    NO_RESULTS: 'Không tìm thấy đơn hàng phù hợp.',
+  },
+  ADD_PRODUCT: {
+    SUCCESS: 'Sản phẩm đã được thêm vào đơn hàng.',
+    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+    NOT_FOUND: 'Không tìm thấy đơn hàng hoặc sản phẩm.',
+    MAX_QUANTITY_REACHED: 'Sản phẩm đã đạt số lượng tối đa.',
+    ALREADY_ADDED: 'Sản phẩm đã được thêm vào đơn hàng trước đó.',
+    OUT_OF_STOCK: 'Sản phẩm đã hết hàng.',
+  },
+}
+
 module.exports = {
   USERS_MESSAGES,
   SERVERS_MESSAGES,
   PRODUCTS_MESSAGES,
+  ORDERS_MESSAGES,
 }
