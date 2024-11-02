@@ -39,13 +39,33 @@ class ProductController {
   // Cập nhật sản phẩm
   async updateProduct(req, res, next) {
     try {
-      const productId = req.params.id 
-      const productData = req.body 
-      const response = await ProductService.updateProduct(productId, productData) 
+      const productId = req.params.id
+      const productData = req.body
+      const response = await ProductService.updateProduct(
+        productId,
+        productData,
+      )
       if (!response.success) {
-        return res.status(HttpStatusCodes.NOT_FOUND).json({ message: response.message })
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
       }
-      return res.status(HttpStatusCodes.OK).json(response.product) 
+      return res.status(HttpStatusCodes.OK).json(response.product)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async searchProduct(req, res, next) {
+    try {
+      const query = req.query.q
+      const response = await ProductService.searchProduct(query)
+      if (!response.success) {
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      }
+      return res.status(HttpStatusCodes.OK).json(response.products)
     } catch (error) {
       next(error)
     }

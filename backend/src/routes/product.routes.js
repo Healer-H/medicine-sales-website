@@ -77,6 +77,87 @@ router.post(Path.Product.Add, ProductController.addProduct)
 
 /**
  * @swagger
+ * /products/search:
+ *   get:
+ *     summary: Tìm kiếm sản phẩm
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Từ khóa tìm kiếm sản phẩm
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm tìm thấy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: 12345
+ *                   name:
+ *                     type: string
+ *                     example: Sản phẩm A
+ *                   price:
+ *                     type: number
+ *                     example: 100000
+ *                   description:
+ *                     type: string
+ *                     example: Mô tả sản phẩm A
+ *       400:
+ *         description: Đầu vào không hợp lệ
+ *       404:
+ *         description: Không tìm thấy sản phẩm
+ */
+router.get(Path.Product.Search, ProductController.searchProduct)
+
+/**
+ * @swagger
+ * /products/all:
+ *   get:
+ *     summary: Lấy danh sách sản phẩm
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID của sản phẩm
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     description: Tên sản phẩm
+ *                     example: "Product Name"
+ *                   price:
+ *                     type: number
+ *                     description: Giá sản phẩm
+ *                     example: 100
+ *                   description:
+ *                     type: string
+ *                     description: Mô tả sản phẩm
+ *                     example: "Product Description"
+ *       500:
+ *         description: Lỗi khi lấy danh sách sản phẩm
+ */
+router.get(Path.Product.All, ProductController.getAllProducts)
+
+/**
+ * @swagger
  * /products/all:
  *   get:
  *     summary: Lấy danh sách sản phẩm
