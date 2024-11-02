@@ -513,7 +513,7 @@ Router.post(
 
 Router.use(authentication, authorization)
 Router.get(Path.Admin.GetAllUser, userControllers.getAllUser)
-Router.get(Path.Admin.DetailUser, userControllers.detailUser)
+Router.get(Path.Admin.DetailUser, userControllers.getUserDetail)
 Router.post(Path.Admin.CreateUser, userControllers.createUser)
 Router.delete(Path.Admin.DeleteUser, userControllers.deleteUser)
 Router.put(Path.Admin.PutUser, userControllers.putUser)

@@ -81,10 +81,10 @@ class UserControllers {
     }
   }
 
-  async detailUser(req, res, next) {
+  async getUserDetail(req, res, next) {
     try {
       const id = req.params.id
-      const response = await userServices.detailUser(id)
+      const response = await userServices.getUserDetail(id)
       if (!response.success)
         return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
       res.status(HttpStatusCodes.OK).json(response.user)

@@ -169,7 +169,7 @@ class userServices {
     }
   }
 
-  async detailUser(id) {
+  async getUserDetail(id) {
     try {
       const user = await User.findByPk(id, {
         attributes: { exclude: ['password'] },
