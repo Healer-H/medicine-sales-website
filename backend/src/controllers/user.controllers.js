@@ -11,7 +11,9 @@ class UserControllers {
       const response = await userServices.login(email, password)
 
       if (!response.success)
-        return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
+        return res
+          .status(HttpStatusCodes.UNAUTHORIZED)
+          .json({ error: response.message })
       res.cookie('access_token', response.access_token, Cookie.Options)
       res.status(HttpStatusCodes.OK).json({
         message: response.message,
@@ -28,7 +30,7 @@ class UserControllers {
       res.clearCookie('access_token', Cookie.Options)
       res
         .status(HttpStatusCodes.OK)
-        .json(Messages.USERS_MESSAGES.LOGOUT.SUCCESS)
+        .json({ message: Messages.USERS_MESSAGES.LOGOUT.SUCCESS })
     } catch (error) {
       next(error)
     }
@@ -39,7 +41,9 @@ class UserControllers {
       const { email } = req.body
       const response = await userServices.forgotPassword(email)
       if (!response.success)
-        return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
+        return res
+          .status(HttpStatusCodes.UNAUTHORIZED)
+          .json({ message: response.message })
 
       res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {
@@ -51,8 +55,10 @@ class UserControllers {
     try {
       const { email, otp, newPassword } = req.body
       const response = await userServices.resetPassword(email, otp, newPassword)
-      if (response.success)
-        return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
+      if (!response.success)
+        return res
+          .status(HttpStatusCodes.UNAUTHORIZED)
+          .json({ message: response.message })
       res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {
       next(error)
@@ -72,7 +78,9 @@ class UserControllers {
     try {
       const response = await userServices.createUser(req.body)
       if (!response.success)
-        return res.status(HttpStatusCodes.BAD_REQUEST).json(response.message)
+        return res
+          .status(HttpStatusCodes.BAD_REQUEST)
+          .json({ message: response.message })
       res
         .status(HttpStatusCodes.CREATED)
         .json({ message: response.message, user: response.user })
@@ -86,7 +94,9 @@ class UserControllers {
       const id = req.params.id
       const response = await userServices.getUserDetail(id)
       if (!response.success)
-        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
       res.status(HttpStatusCodes.OK).json(response.user)
     } catch (error) {
       next(error)
@@ -98,8 +108,10 @@ class UserControllers {
       const id = req.params.id
       const response = await userServices.deleteUser(id)
       if (!response.success)
-        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
-      res.status(HttpStatusCodes.OK).json(response.message)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {
       next(error)
     }
@@ -110,8 +122,10 @@ class UserControllers {
       const id = req.params.id
       const response = await userServices.putUser(id, req.body)
       if (!response.success)
-        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
-      res.status(HttpStatusCodes.OK).json(response.message)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {
       next(error)
     }
@@ -122,8 +136,10 @@ class UserControllers {
       const id = req.params.id
       const response = await userServices.patchUser(id, req.body)
       if (!response.success)
-        return res.status(HttpStatusCodes.NOT_FOUND).json(response.message)
-      res.status(HttpStatusCodes.OK).json(response.message)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {
       next(error)
     }
