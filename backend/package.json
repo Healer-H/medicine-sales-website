@@ -5,9 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "test": "cross-env NODE_ENV=development jest",
-    "test:coverage": "cross-env NODE_ENV=development jest --coverage",
-    "test:watch": "cross-env NODE_ENV=development jest --watch"
+    "test": "cross-env NODE_ENV=development jest --config ./spec/config/jest.config.json",
+    "test:watch": "cross-env NODE_ENV=development jest --watch --config ./spec/config/jest.config.json"
   },
   "keywords": [],
   "author": "",

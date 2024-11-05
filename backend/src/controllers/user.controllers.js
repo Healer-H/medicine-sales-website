@@ -51,7 +51,7 @@ class UserControllers {
     try {
       const { email, otp, newPassword } = req.body
       const response = await userServices.resetPassword(email, otp, newPassword)
-      if (response.success)
+      if (!response.success)
         return res.status(HttpStatusCodes.UNAUTHORIZED).json(response.message)
       res.status(HttpStatusCodes.OK).json({ message: response.message })
     } catch (error) {

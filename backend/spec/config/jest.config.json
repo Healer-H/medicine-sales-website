@@ -1,4 +1,5 @@
 {
+  "rootDir": "../../",
   "testEnvironment": "node",
   "testMatch": ["**/*.spec.js", "**/*.test.js"],
   "testPathIgnorePatterns": ["/node_modules/"],
@@ -8,6 +9,6 @@
     "src/**/*.{js,jsx}",
     "!src/**/*.test.js"
   ],
-  "coverageDirectory": "/spec/reports/coverage",
+  "coverageDirectory": "./spec/reports/coverage",
   "verbose": true
 }
