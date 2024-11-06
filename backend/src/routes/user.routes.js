@@ -7,6 +7,8 @@ const {
 } = require('../middlewares/auth.middelwares')
 
 const {
+  validateLogin,
+  validateCreateUser,
   validateForgotPassword,
   validateRequest,
   validateResetPassword,
@@ -497,24 +499,35 @@ const {
  *                   example: Đã xảy ra lỗi khi thay thế người dùng
  */
 
-Router.use(validateRequest)
-Router.post(Path.User.Login, userControllers.login)
+Router.post(
+  Path.User.Login,
+  validateLogin,
+  validateRequest,
+  userControllers.login,
+)
 Router.post(Path.User.Logout, userControllers.logout)
 Router.post(
   Path.User.ForgotPassword,
   validateForgotPassword,
+  validateRequest,
   userControllers.forgotPassword,
 )
 Router.post(
   Path.User.ResetPassword,
   validateResetPassword,
+  validateRequest,
   userControllers.resetPassword,
 )
 
 Router.use(authentication, authorization)
 Router.get(Path.Admin.GetAllUser, userControllers.getAllUser)
 Router.get(Path.Admin.DetailUser, userControllers.getUserDetail)
-Router.post(Path.Admin.CreateUser, userControllers.createUser)
+Router.post(
+  Path.Admin.CreateUser,
+  validateCreateUser,
+  validateRequest,
+  userControllers.createUser,
+)
 Router.delete(Path.Admin.DeleteUser, userControllers.deleteUser)
 Router.put(Path.Admin.PutUser, userControllers.putUser)
 Router.patch(Path.Admin.PatchUser, userControllers.patchUser)

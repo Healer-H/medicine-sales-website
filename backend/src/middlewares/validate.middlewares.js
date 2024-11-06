@@ -2,18 +2,13 @@
 const { body, validationResult } = require('express-validator')
 const HttpStatusCodes = require('../constants/httpStatusCodes')
 
-const validateForgotPassword = [
+// BASE VALIDATORS
+const validateEmail = [
   body('email').isEmail().withMessage('Email không hợp lệ'),
 ]
 
-const validateResetPassword = [
-  body('email').isEmail().withMessage('Email không hợp lệ'),
-  body('otp')
-    .isLength({ min: 6, max: 6 })
-    .withMessage('OTP phải có 6 ký tự')
-    .matches(/[0-9]/)
-    .withMessage('OTP phải chỉ chứa số'),
-  body('newPassword')
+const validatePassword = (passwordField = 'password') => [
+  body(passwordField)
     .isLength({ min: 6 })
     .withMessage('Mật khẩu phải có ít nhất 6 ký tự')
     .matches(/[A-Z]/)
@@ -26,17 +21,35 @@ const validateResetPassword = [
     .withMessage('Mật khẩu phải chứa ít nhất một ký tự đặc biệt'),
 ]
 
+const validateOTP = [body('otp').isNumeric().withMessage('OTP phải là số')]
+
+// SPECIFIC VALIDATORS
+const validateLogin = [...validateEmail]
+
+const validateCreateUser = [...validateEmail, ...validatePassword()]
+
+const validateForgotPassword = [...validateEmail]
+
+const validateResetPassword = [
+  ...validateEmail,
+  ...validatePassword('newPassword'),
+  ...validateOTP,
+]
+
+// REQUEST VALIDATOR
 const validateRequest = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res
       .status(HttpStatusCodes.BAD_REQUEST)
-      .json({ success: false, errors: errors.array() })
+      .json({ errors: errors.array() })
   }
   next()
 }
 
 module.exports = {
+  validateLogin,
+  validateCreateUser,
   validateForgotPassword,
   validateResetPassword,
   validateRequest,
