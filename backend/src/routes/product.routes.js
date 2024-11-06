@@ -230,4 +230,36 @@ router.get(Path.Product.Id, ProductController.getProductById)
  */
 router.put(Path.Product.Update, ProductController.updateProduct)
 
+/**
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Xóa sản phẩm
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID của sản phẩm
+ *     responses:
+ *       200:
+ *         description: Sản phẩm đã được xóa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Thông báo thành công
+ *                   example: "Product deleted successfully"
+ *       404:
+ *         description: Không tìm thấy sản phẩm
+ *       500:
+ *         description: Lỗi khi xóa sản phẩm
+ */
+router.delete(Path.Product.Id, ProductController.deleteProduct)
+
 module.exports = router
