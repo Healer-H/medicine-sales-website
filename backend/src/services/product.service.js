@@ -83,6 +83,26 @@ class ProductService {
       throw new Error('Error while searching product: ' + error.message)
     }
   }
+  
+  // Xóa sản phẩm
+  async deleteProduct(productId) {
+    try {
+      const product = await Product.findByPk(productId)
+      if (!product) {
+        return {
+          success: false,
+          message: Messages.PRODUCTS_MESSAGES.DELETE.NOT_FOUND,
+        }
+      }
+      await product.destroy()
+      return {
+        success: true,
+        message: Messages.PRODUCTS_MESSAGES.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error('Error while deleting product: ' + error.message)
+    }
+  }
 }
 
 module.exports = new ProductService()
