@@ -56,11 +56,27 @@ class ProductController {
     }
   }
 
+  async searchProduct(req, res, next) {
+    try {
+      const query = req.query.q
+      const response = await ProductService.searchProduct(query)
+      if (!response.success) {
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      }
+      return res.status(HttpStatusCodes.OK).json(response.products)
+    } catch (error) {
+      next(error)
+    }
+  }
+ 
   // Xóa sản phẩm
   async deleteProduct(req, res, next) {
     try {
       const productId = req.params.id
       const response = await ProductService.deleteProduct(productId)
+
       if (!response.success) {
         return res
           .status(HttpStatusCodes.NOT_FOUND)

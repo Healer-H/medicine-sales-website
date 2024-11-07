@@ -2,6 +2,8 @@ const { sequelize } = require('../config/database.configs')
 const User = require('./user.model')
 const Token = require('./token.model')
 const Product = require('./product.model')
+const Order = require('./order.model')
+const OrderDetail = require('./orderDetail.model')
 
 // Thiết lập các mối quan hệ giữa các model
 // Ví dụ: Product.belongsTo(User);
@@ -24,6 +26,7 @@ module.exports = {
   User,
   Token,
   Product,
+  Order,
+  OrderDetail,
   syncModels,
 }
-

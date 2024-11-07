@@ -1,6 +1,7 @@
 // services/productService.js
 const Product = require('../models/product.model')
 const Messages = require('../constants/messages')
+const { Op } = require('sequelize')
 class ProductService {
   // Thêm sản phẩm mới
   async addProduct(productData) {
@@ -59,6 +60,30 @@ class ProductService {
     }
   }
 
+  async searchProduct(query) {
+    try {
+      const products = await Product.findAll({
+        where: {
+          name: {
+            [Op.like]: `%${query}%`,
+          },
+        },
+      })
+      if (products.length === 0) {
+        return {
+          success: false,
+          message: Messages.PRODUCTS_MESSAGES.SEARCH.NO_RESULTS,
+        }
+      }
+      return {
+        success: true,
+        products,
+      }
+    } catch (error) {
+      throw new Error('Error while searching product: ' + error.message)
+    }
+  }
+  
   // Xóa sản phẩm
   async deleteProduct(productId) {
     try {
