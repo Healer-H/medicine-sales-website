@@ -64,8 +64,8 @@ describe(`POST ${loginRoute}`, function() {  // Mô tả nhóm test cho API đă
           })
           .expect(400)  // Lỗi vì thiếu thông tin bắt buộc
           .expect(res => {
-            if (!('error' in res.body)) throw new Error("Thiếu thông báo lỗi");
-              if (res.body.error !== 'Tên tài khoản và mật khẩu là bắt buộc') throw new Error("Thông báo lỗi sai");
+            if (!('errors' in res.body)) throw new Error("Thiếu thông báo lỗi");
+              if (res.body.errors[0].msg !== 'Email không hợp lệ') throw new Error("Thông báo lỗi sai");
             })
           .end(done); // Kết thúc test
     });
@@ -78,8 +78,8 @@ describe(`POST ${loginRoute}`, function() {  // Mô tả nhóm test cho API đă
           })
           .expect(400)  // Định dạng không hợp lệ
           .expect(res => {
-            if (!('error' in res.body)) throw new Error("Thiếu thông báo lỗi");
-              if (res.body.error !== 'Tên tài khoản không đúng định dạng') throw new Error("Thông báo lỗi sai");
+            if (!('errors' in res.body)) throw new Error("Thiếu thông báo lỗi");
+              if (res.body.errors[0].msg !== 'Email không hợp lệ') throw new Error("Thông báo lỗi sai");
           })
           .end(done);
       });
@@ -92,8 +92,8 @@ describe(`POST ${loginRoute}`, function() {  // Mô tả nhóm test cho API đă
           })
           .expect(400)  // Không cho phép đăng nhập
           .expect(res => {
-            if (!('error' in res.body)) throw new Error("Thiếu thông báo lỗi");
-              if (res.body.error !== 'Không thể đăng nhập với thông tin đăng nhập trên.') throw new Error("Thông báo lỗi sai");
+            if (!('errors' in res.body)) throw new Error("Thiếu thông báo lỗi");
+              if (res.body.errors[0].msg !== 'Email không hợp lệ') throw new Error("Thông báo lỗi sai");
           })
           .end(done);
       });
