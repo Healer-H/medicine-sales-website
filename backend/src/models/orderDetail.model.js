@@ -49,6 +49,11 @@ OrderDetail.init(
       allowNull: false,
       defaultValue: 0,
     },
+    discount: {
+      // Giảm giá cho từng sản phẩm trong đơn hàng
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
   },
   {
     sequelize,

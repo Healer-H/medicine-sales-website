@@ -35,6 +35,11 @@ Product.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    discount: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: 0,
+    },
   },
   {
     sequelize,

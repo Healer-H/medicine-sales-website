@@ -99,33 +99,32 @@ const PRODUCTS_MESSAGES = {
 
 const ORDERS_MESSAGES = {
   CREATE: {
-    SUCCESS: 'Đơn hàng đã được tạo thành công.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
+    SUCCESS: 'Hóa đơn đã được tạo thành công.',
   },
   UPDATE: {
-    SUCCESS: 'Đơn hàng đã được cập nhật thành công.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
-    NOT_FOUND: 'Đơn hàng không tồn tại.',
+    SUCCESS: 'Hóa đơn đã được cập nhật thành công.',
+    NOT_FOUND: 'Hóa đơn không tồn tại.',
+    EXPORTED: 'Hóa đơn đã được xuất. Không thể cập nhật.',
   },
   DELETE: {
-    SUCCESS: 'Đơn hàng đã được xóa thành công.',
-    NOT_FOUND: 'Đơn hàng không tồn tại.',
+    SUCCESS: 'Hóa đơn đã được xóa thành công.',
+    NOT_FOUND: 'Hóa đơn không tồn tại.',
   },
   GET: {
-    SUCCESS: 'Danh sách đơn hàng.',
-    NOT_FOUND: 'Không tìm thấy đơn hàng.',
+    SUCCESS: 'Danh sách hóa đơn.',
+    NOT_FOUND: 'Không tìm thấy hóa đơn.',
   },
   SEARCH: {
-    SUCCESS: 'Danh sách đơn hàng tìm kiếm.',
-    NO_RESULTS: 'Không tìm thấy đơn hàng phù hợp.',
+    SUCCESS: 'Danh sách hóa đơn tìm kiếm.',
+    NO_RESULTS: 'Không tìm thấy hóa đơn phù hợp.',
   },
   ADD_PRODUCT: {
-    SUCCESS: 'Sản phẩm đã được thêm vào đơn hàng.',
-    INVALID_INPUT: 'Thông tin đầu vào không hợp lệ.',
-    NOT_FOUND: 'Không tìm thấy đơn hàng hoặc sản phẩm.',
+    SUCCESS: 'Sản phẩm đã được thêm vào hóa đơn.',
+    NOT_FOUND: 'Không tìm thấy hóa đơn hoặc sản phẩm.',
     MAX_QUANTITY_REACHED: 'Sản phẩm đã đạt số lượng tối đa.',
-    ALREADY_ADDED: 'Sản phẩm đã được thêm vào đơn hàng trước đó.',
+    ALREADY_ADDED: 'Sản phẩm đã được thêm vào hóa đơn trước đó.',
     OUT_OF_STOCK: 'Sản phẩm đã hết hàng.',
+    EXPORTED: 'Hóa đơn đã được xuất. Không thể thêm sản phẩm.',
   },
 }
 

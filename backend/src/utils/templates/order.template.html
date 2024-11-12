@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hóa Đơn Bán Hàng</title>
+    <style>
+        /* Định dạng CSS cho hóa đơn dọc */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        } */
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            /* Giới hạn chiều rộng của hóa đơn */
+            margin: auto;
+            overflow: hidden;
+            /* Ẩn phần tràn ra khỏi container */
+        }
+
+        .table {
+            width: 100%;
+            /* Giới hạn chiều rộng bảng trong container */
+            border-collapse: collapse;
+            overflow-x: auto;
+            /* Cho phép cuộn ngang nếu bảng quá rộng */
+        }
+
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            /* Đảm bảo logo được căn giữa */
+        }
+
+        .order-details,
+        .summary,
+        .payment-info,
+        .footer {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            /* Thêm khoảng cách phía dưới */
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            /* Thay đổi từ left thành center */
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .summary p {
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: right;
+            /* Đảm bảo căn phải */
+        }
+
+        .payment-info p {
+            font-size: 1em;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .payment-methods img {
+            width: 90px;
+            /* Đặt kích thước cố định cho ảnh */
+            height: 90px;
+            /* Đảm bảo chiều cao cũng cố định */
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 8px;
+            object-fit: cover;
+            /* Đảm bảo ảnh không bị méo */
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Thương hiệu và địa chỉ nhà thuốc -->
+        <div class="header">
+            <h2>{{pharmacyBrand}}</h2>
+            <p>{{pharmacyAddress}}</p>
+            <hr>
+        </div>
+
+
+        <!-- Thông tin hóa đơn -->
+        <div class="order-details">
+            <p>Mã hóa đơn: {{orderId}}</p>
+            <p>Ngày bán: {{formatDate createdAt}}</p>
+            <p>Mã nhân viên bán hàng: {{employeeId}}</p>
+        </div>
+
+        <!-- Bảng chi tiết sản phẩm -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Giảm giá</th>
+                    <th>Thành tiền sau giảm</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orderDetails}}
+                <tr>
+                    <td>{{productName}}</td>
+                    <td>{{formatCurrency unitPrice}}</td>
+                    <td>{{quantity}}</td>
+                    <td>{{formatCurrency totalPrice}}</td>
+                    <td>{{discount}}%</td>
+                    <td>{{formatCurrency finalAmount}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <!-- Tổng kết thanh toán -->
+        <div class="summary">
+            <p>Tổng hóa đơn: {{formatCurrency totalAmount}}</p>
+        </div>
+
+        <!-- Thông tin thanh toán -->
+        <div class="payment-info">
+            <h3>Thông tin thanh toán</h3>
+            {{#ifEquals paymentMethod "cash"}}
+            <p>Thanh toán bằng tiền mặt.</p>
+            {{/ifEquals}}
+            {{#ifEquals paymentMethod "credit_card"}}
+            <p>Thanh toán bằng thẻ tín dụng.</p>
+            {{/ifEquals}}
+            {{#ifEquals paymentMethod "e-wallet"}}
+            <p>Thanh toán qua ví điện tử hoặc ngân hàng.</p>
+            {{/ifEquals}}
+        </div>
+
+        <!-- Các phương thức thanh toán khác -->
+        {{#ifEquals paymentMethod "e-wallet"}}
+        <div class="payment-methods">
+            <img src="https://medicine-sales-website.s3.ap-southeast-2.amazonaws.com/momo.jpg" alt="Momo">
+            <img src="https://medicine-sales-website.s3.ap-southeast-2.amazonaws.com/zalopay.jpg" alt="ZaloPay">
+            <img src="https://medicine-sales-website.s3.ap-southeast-2.amazonaws.com/bank.jpg"
+            alt="Chuyển khoản ngân hàng">
+        </div>
+        {{/ifEquals}}
+
+        <!-- Lời cảm ơn -->
+        <div class="footer">
+            <p>Cảm ơn quý khách!</p>
+            <!-- Logo của quầy thuốc -->
+            <div class="logo">
+                <img src="https://medicine-sales-website.s3.ap-southeast-2.amazonaws.com/Logo.png"
+                    alt="Logo của quầy thuốc">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

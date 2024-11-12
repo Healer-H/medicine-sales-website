@@ -2,7 +2,12 @@ const express = require('express')
 const router = express.Router()
 const ProductController = require('../controllers/product.controller')
 const Path = require('../constants/paths')
+const {
+  authentication,
+  authorization,
+} = require('../middlewares/auth.middelwares')
 
+router.use(authentication)
 /**
  * @swagger
  * tags:
@@ -309,7 +314,7 @@ router.get(Path.Product.Id, ProductController.getProductById)
  *       500:
  *         description: Lỗi khi cập nhật sản phẩm
  */
-router.put(Path.Product.Update, ProductController.updateProduct)
+router.put(Path.Product.Update, authorization, ProductController.updateProduct)
 
 /**
  * @swagger
@@ -341,6 +346,6 @@ router.put(Path.Product.Update, ProductController.updateProduct)
  *       500:
  *         description: Lỗi khi xóa sản phẩm
  */
-router.delete(Path.Product.Id, ProductController.deleteProduct)
+router.delete(Path.Product.Id, authorization, ProductController.deleteProduct)
 
 module.exports = router
