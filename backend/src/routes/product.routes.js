@@ -6,6 +6,10 @@ const {
   authentication,
   authorization,
 } = require('../middlewares/auth.middelwares')
+const {
+  validateProperties,
+  validateProduct,
+} = require('../middlewares/validate.middlewares')
 
 router.use(authentication)
 /**
@@ -78,7 +82,12 @@ router.use(authentication)
  *       500:
  *         description: Lỗi khi thêm sản phẩm
  */
-router.post(Path.Product.Add, ProductController.addProduct)
+router.post(
+    Path.Product.Add,
+    validateProperties(['name', 'price', 'description', 'stock', 'expiration_date', 'prescription_required']),
+    validateProduct,
+    ProductController.addProduct
+)
 
 /**
  * @swagger
