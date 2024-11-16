@@ -6,11 +6,17 @@ const Order = require('./order.model')
 const OrderDetail = require('./orderDetail.model')
 
 // Thiết lập các mối quan hệ giữa các model
-// Ví dụ: Product.belongsTo(User);
-// User.hasMany(Product);
 
-// Thiết lập quan hệ giữa các model đã được định nghĩa trong từng file riêng lẻ
-// Nếu có quan hệ phức tạp hơn, có thể định nghĩa ở đây
+// models/User.js
+User.hasMany(Order, { foreignKey: 'employeeId' })
+
+// models/Order.js
+Order.hasMany(OrderDetail, { foreignKey: 'orderId' })
+OrderDetail.belongsTo(Order, { foreignKey: 'orderId' })
+
+// models/Product.js
+Product.hasMany(OrderDetail, { foreignKey: 'productId' })
+OrderDetail.belongsTo(Product, { foreignKey: 'productId' })
 
 // Đồng bộ các model với cơ sở dữ liệu
 const syncModels = async () => {

@@ -505,7 +505,7 @@ Router.post(
   validateRequest,
   userControllers.login,
 )
-Router.post(Path.User.Logout, userControllers.logout)
+Router.post(Path.User.Logout, authentication, userControllers.logout)
 Router.post(
   Path.User.ForgotPassword,
   validateForgotPassword,

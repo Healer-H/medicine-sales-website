@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize')
 const { sequelize } = require('../config/database.configs')
+const User = require('./user.model')
 
 class Order extends Model {}
 
@@ -15,20 +16,20 @@ Order.init(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    employeeId: {
+      // ID nhân viên xử lý đơn hàng
+      type: DataTypes.INTEGER,
+      references: {
+        model: User,
+        key: 'id',
+      },
+      allowNull: false,
+    },
     totalAmount: {
       // Tổng số tiền của đơn hàng
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
-    },
-    status: {
-      // Trạng thái đơn hàng (pending, completed, cancelled)
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: 'pending',
-      validate: {
-        isIn: [['pending', 'completed', 'cancelled']],
-      },
     },
     paymentMethod: {
       // Phương thức thanh toán (cash, credit_card, e-wallet)
@@ -38,14 +39,10 @@ Order.init(
         isIn: [['cash', 'credit_card', 'e-wallet']],
       },
     },
-    paymentStatus: {
-      // Trạng thái thanh toán (unpaid, paid, refunded)
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: 'unpaid',
-      validate: {
-        isIn: [['unpaid', 'paid', 'refunded']],
-      },
+    statusExport: {
+      type: DataTypes.BOOLEAN,
+      // Trạng thái đơn hàng (pending, completed)
+      defaultValue: false,
     },
   },
   {
