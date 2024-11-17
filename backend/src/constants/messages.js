@@ -80,6 +80,9 @@ const SERVERS_MESSAGES = {
 }
 
 const PRODUCTS_MESSAGES = {
+  ADD: {
+    SUCCESS: 'Sản phẩm đã được thêm thành công.',
+  },
   CREATE: {
     SUCCESS: 'Sản phẩm đã được tạo thành công.',
   },

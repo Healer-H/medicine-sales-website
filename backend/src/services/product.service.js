@@ -7,7 +7,11 @@ class ProductService {
   async addProduct(productData) {
     try {
       const newProduct = await Product.create(productData)
-      return newProduct
+      return {
+        success: true,
+        message: Messages.PRODUCTS_MESSAGES.ADD.SUCCESS,
+        product: newProduct,
+      }
     } catch (error) {
       throw new Error('Error while adding product: ' + error.message)
     }
