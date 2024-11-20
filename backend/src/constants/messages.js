@@ -131,9 +131,16 @@ const ORDERS_MESSAGES = {
   },
 }
 
+const REPORTS_MESSAGES = {
+  REPORTS_REVENUE: {
+    NOT_REVENUE: 'Không có doanh thu ở khoảng thời gian này.',
+    INVALID_TYPE: 'Loại báo cáo không hợp lệ.',
+  },
+}
 module.exports = {
   USERS_MESSAGES,
   SERVERS_MESSAGES,
   PRODUCTS_MESSAGES,
   ORDERS_MESSAGES,
+  REPORTS_MESSAGES,
 }
