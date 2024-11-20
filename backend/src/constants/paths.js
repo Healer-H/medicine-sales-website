@@ -35,6 +35,10 @@ const Path = {
     ExportOrder: '/export-order/:id',
     UpdateOrder: '/:id',
   },
+  Report: {
+    Base: '/reports',
+    GetRevenueReport: '/get-revenue-report',
+  },
 }
 
 module.exports = Path
