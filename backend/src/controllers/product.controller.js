@@ -1,8 +1,8 @@
+const ProductService = require('../services/product.service')
 const HttpStatusCodes = require('../constants/httpStatusCodes')
+const Messages = require('../constants/messages')
 
 // controllers/productController.js
-const ProductService = require('../services/product.service')
-
 class ProductController {
   // Thêm sản phẩm mới
   async addProduct(req, res, next) {
@@ -83,6 +83,17 @@ class ProductController {
           .json({ message: response.message })
       }
       return res.status(HttpStatusCodes.OK).json({ message: response.message }) // Trả về thông báo thành công
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Lấy danh sách sản phẩm bán chạy
+  async getTopSellingProducts(req, res, next) {
+    try {
+      const { startDate, endDate } = req.query
+      const response = await ProductService.getTopSellingProducts(startDate, endDate)
+      return res.status(HttpStatusCodes.OK).json(response)
     } catch (error) {
       next(error)
     }

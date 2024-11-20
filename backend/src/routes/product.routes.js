@@ -9,6 +9,7 @@ const {
 const {
   validateProperties,
   validateProduct,
+  validateTopSellingDates,
 } = require('../middlewares/validate.middlewares')
 
 router.use(authentication)
@@ -88,6 +89,77 @@ router.post(
     validateProduct,
     ProductController.addProduct
 )
+
+
+/**
+ * @swagger
+ * /products/top-selling:
+ *   get:
+ *     summary: Lấy danh sách sản phẩm bán chạy nhất
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: false
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm bán chạy nhất
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Danh sách sản phẩm bán chạy nhất."
+ *                 topSellingProducts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: string
+ *                         example: "12345"
+ *                       productName:
+ *                         type: string
+ *                         example: "Product A"
+ *                       totalSold:
+ *                         type: integer
+ *                         example: 1000
+ *                       totalRevenue:
+ *                         type: number
+ *                         format: float
+ *                         example: 500000
+ *       400:
+ *         description: Đầu vào không hợp lệ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         example: "Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng YYYY-MM-DD."
+ *       401:
+ *         description: Không có quyền truy cập
+ *       500:
+ *         description: Lỗi máy chủ
+ */
+router.get(Path.Product.TopSelling, authentication, validateTopSellingDates, ProductController.getTopSellingProducts)
 
 /**
  * @swagger
@@ -356,5 +428,6 @@ router.put(Path.Product.Update, authorization, ProductController.updateProduct)
  *         description: Lỗi khi xóa sản phẩm
  */
 router.delete(Path.Product.Id, authorization, ProductController.deleteProduct)
+
 
 module.exports = router

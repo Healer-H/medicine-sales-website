@@ -18,6 +18,7 @@ const Path = {
     All: '/all',
     Update: '/:id',
     Search: '/search',
+    TopSelling: '/top-selling',
   },
   Admin: {
     Base: '/admin',
