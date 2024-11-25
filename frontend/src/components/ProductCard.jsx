@@ -1,5 +1,6 @@
 // ProductCard.jsx
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ProductCard = ({ product }) => {
   return (
@@ -21,6 +22,15 @@ const ProductCard = ({ product }) => {
       </button>
     </div>
   );
+};
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    price: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ProductCard;

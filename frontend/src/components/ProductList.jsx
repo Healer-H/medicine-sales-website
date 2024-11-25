@@ -1,7 +1,11 @@
 // ProductList.jsx
 import React from 'react';
+import { loadMoreData } from '../store/dashboardSlice';
+import { useDispatch } from 'react-redux';
+
 
 const ProductList = ({ title, products }) => {
+  const dispatch = useDispatch();
   return (
     <div className="bg-white p-4 shadow-md rounded-md mt-4">
       <h3 className="text-lg font-bold">{title}</h3>
@@ -23,7 +27,8 @@ const ProductList = ({ title, products }) => {
           </li>
         ))}
       </ul>
-      <button className="mt-4 text-blue-500">Xem thêm</button>
+      <button className="mt-4 text-blue-500"
+      onClick={() => dispatch(loadMoreData())}>Xem thêm</button>
     </div>
   );
 };
