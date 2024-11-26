@@ -18,6 +18,8 @@ const Path = {
     All: '/all',
     Update: '/:id',
     Search: '/search',
+    GetExpired: '/get-expired',
+    GetLowStock: '/get-low-stock',
   },
   Admin: {
     Base: '/admin',

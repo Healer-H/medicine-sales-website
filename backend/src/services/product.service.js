@@ -87,7 +87,7 @@ class ProductService {
       throw new Error('Error while searching product: ' + error.message)
     }
   }
-  
+
   // Xóa sản phẩm
   async deleteProduct(productId) {
     try {
@@ -105,6 +105,42 @@ class ProductService {
       }
     } catch (error) {
       throw new Error('Error while deleting product: ' + error.message)
+    }
+  }
+
+  // Lấy danh sách sản phẩm hết hạn
+  async getExpiredProducts() {
+    try {
+      const products = await Product.findAll({
+        where: {
+          expiration_date: {
+            [Op.lt]: new Date(),
+          },
+        },
+      })
+      return products
+    } catch (error) {
+      throw new Error(
+        'Error while retrieving expired products: ' + error.message,
+      )
+    }
+  }
+
+  // Lấy danh sách sản phẩm sắp hết hàng
+  async getLowStockProducts() {
+    try {
+      const products = await Product.findAll({
+        where: {
+          stock: {
+            [Op.lt]: 10,
+          },
+        },
+      })
+      return products
+    } catch (error) {
+      throw new Error(
+        'Error while retrieving low stock products: ' + error.message,
+      )
     }
   }
 }
