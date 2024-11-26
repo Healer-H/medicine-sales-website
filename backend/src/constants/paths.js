@@ -34,6 +34,10 @@ const Path = {
     CreateOrder: '/create-order',
     ExportOrder: '/export-order/:id',
     UpdateOrder: '/:id',
+    GetAllOrders: '/',
+    DeleteOrder: '/:id',
+    DeleteMultipleOrders: '/delete-multiple-orders',
+    DeleteAllOrders: '/delete-all-orders',
   },
   Report: {
     Base: '/reports',

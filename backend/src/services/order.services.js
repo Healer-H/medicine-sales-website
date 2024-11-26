@@ -175,6 +175,70 @@ class OrderServices {
       throw new Error(`Add product to order service error: ${error}`)
     }
   }
+
+  async getAllOrders() {
+    try {
+      const orders = await Order.findAll({
+        include: {
+          model: OrderDetail,
+          include: Product,
+        },
+      })
+      return {
+        message: Messages.ORDERS_MESSAGES.GET.SUCCESS,
+        orders,
+      }
+    } catch (error) {
+      throw new Error(`Get all orders service error: ${error}`)
+    }
+  }
+
+  async deleteOrder(orderId) {
+    try {
+      const order = await Order.findByPk(orderId)
+      if (!order) {
+        return {
+          success: false,
+          message: Messages.ORDERS_MESSAGES.DELETE.NOT_FOUND,
+        }
+      }
+      await OrderDetail.destroy({ where: { orderId } })
+      await order.destroy()
+      return {
+        success: true,
+        message: Messages.ORDERS_MESSAGES.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete order service error: ${error}`)
+    }
+  }
+
+  async deleteMultipleOrders(orderIds) {
+    try {
+      console.log(orderIds)
+      await OrderDetail.destroy({ where: { id: orderIds } })
+      await Order.destroy({ where: { id: orderIds } })
+      return {
+        success: true,
+        message: Messages.ORDERS_MESSAGES.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete multiple orders service error: ${error}`)
+    }
+  }
+
+  async deleteAllOrders() {
+    try {
+      await OrderDetail.destroy({ where: {} })
+      await Order.destroy({ where: {} })
+      return {
+        success: true,
+        message: Messages.ORDERS_MESSAGES.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete all orders service error: ${error}`)
+    }
+  }
 }
 
 module.exports = new OrderServices()
