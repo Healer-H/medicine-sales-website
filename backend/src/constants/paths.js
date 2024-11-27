@@ -27,6 +27,8 @@ const Path = {
     PutUser: '/user/:id',
     PatchUser: '/user/:id',
     DeleteUser: '/user/:id',
+    DeleteMultipleUsers: '/delete-multiple-users',
+    DeleteAllUsers: '/delete-all-users',
   },
   Order: {
     Base: '/orders',

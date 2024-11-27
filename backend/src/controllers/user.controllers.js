@@ -144,6 +144,33 @@ class UserControllers {
       next(error)
     }
   }
+
+  async deleteMultipleUsers(req, res, next) {
+    try {
+      const { userIds } = req.body
+      const response = await userServices.deleteMultipleUsers(userIds)
+      if (!response.success)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({ message: response.message })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deleteAllUsers(req, res, next) {
+    try {
+      const response = await userServices.deleteAllUsers()
+      if (!response.success)
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({ message: response.message })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = new UserControllers()
