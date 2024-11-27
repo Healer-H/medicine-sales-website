@@ -2,6 +2,9 @@
 const Product = require('../models/product.model')
 const Messages = require('../constants/messages')
 const { Op } = require('sequelize')
+const { readExcelFile, createExcelFile } = require('../utils/excel')
+const { validateProductData } = require('../middlewares/validate.middlewares')
+
 class ProductService {
   // Thêm sản phẩm mới
   async addProduct(productData) {
@@ -87,7 +90,7 @@ class ProductService {
       throw new Error('Error while searching product: ' + error.message)
     }
   }
-  
+
   // Xóa sản phẩm
   async deleteProduct(productId) {
     try {
@@ -105,6 +108,70 @@ class ProductService {
       }
     } catch (error) {
       throw new Error('Error while deleting product: ' + error.message)
+    }
+  }
+
+  // Import sản phẩm từ file excel
+  async importProducts(fileBuffer) {
+    try {
+      const errors = []
+      const validProducts = []
+      const columnMapping = [
+        'name',
+        'description',
+        'price',
+        'stock',
+        'expiration_date',
+        'prescription_required',
+        'discount',
+      ]
+
+      const products = await readExcelFile(fileBuffer, columnMapping)
+
+      // Validate từng sản phẩm
+      products.forEach((product, index) => {
+        const validationErrors = validateProductData(product)
+
+        if (validationErrors.length > 0) {
+          errors.push({ row: index + 2, errors: validationErrors }) // Row 2 là dòng đầu tiên chứa dữ liệu
+        } else {
+          Product.upsert(product)
+          validProducts.push(product)
+        }
+      })
+
+      return {
+        message: Messages.PRODUCTS_MESSAGES.IMPORT.SUCCESS,
+        validProducts,
+        errors,
+      }
+    } catch (error) {
+      throw new Error(`Error while importing products: ${error.message}`)
+    }
+  }
+
+  // Export sản phẩm ra file excel
+  async exportProducts() {
+    try {
+      const products = await Product.findAll({
+        attributes: { exclude: ['prescription_required'] },
+      })
+
+      const columns = [
+        { header: 'Name', key: 'name' },
+        { header: 'Description', key: 'description' },
+        { header: 'Price', key: 'price' },
+        { header: 'Stock', key: 'stock' },
+        { header: 'Expiration Date', key: 'expiration_date' },
+        { header: 'Discount', key: 'discount' },
+      ]
+
+      return createExcelFile(
+        products.map(p => p.toJSON()),
+        columns,
+      )
+    } catch (error) {
+      throw new Error(`Error while exporting products: ${error.message}`)
     }
   }
 }

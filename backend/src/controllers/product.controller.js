@@ -70,7 +70,7 @@ class ProductController {
       next(error)
     }
   }
- 
+
   // Xóa sản phẩm
   async deleteProduct(req, res, next) {
     try {
@@ -83,6 +83,51 @@ class ProductController {
           .json({ message: response.message })
       }
       return res.status(HttpStatusCodes.OK).json({ message: response.message }) // Trả về thông báo thành công
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Import sản phẩm
+  async importProducts(req, res, next) {
+    try {
+      const fileBuffer = req.file.buffer
+
+      // Gọi service để xử lý import
+      const response = await ProductService.importProducts(fileBuffer)
+
+      if (response.errors.length > 0) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({
+          success: false,
+          message:
+            'Một số sản phẩm không thể import được. Vui lòng kiểm tra lại.',
+          errors: response.errors, // Danh sách lỗi
+        })
+      }
+
+      res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: response.message,
+        products: response.products,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Export sản phẩm
+  async exportProducts(req, res, next) {
+    try {
+      const fileBuffer = await ProductService.exportProducts()
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      )
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename="products.xlsx"',
+      )
+      res.status(HttpStatusCodes.OK).send(fileBuffer)
     } catch (error) {
       next(error)
     }

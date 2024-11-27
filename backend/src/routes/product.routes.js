@@ -10,6 +10,7 @@ const {
   validateProperties,
   validateProduct,
 } = require('../middlewares/validate.middlewares')
+const upload = require('../middlewares/upload.middleware')
 
 router.use(authentication)
 /**
@@ -83,10 +84,97 @@ router.use(authentication)
  *         description: Lỗi khi thêm sản phẩm
  */
 router.post(
-    Path.Product.Add,
-    validateProperties(['name', 'price', 'description', 'stock', 'expiration_date', 'prescription_required']),
-    validateProduct,
-    ProductController.addProduct
+  Path.Product.Add,
+  validateProperties([
+    'name',
+    'price',
+    'description',
+    'stock',
+    'expiration_date',
+    'prescription_required',
+  ]),
+  validateProduct,
+  ProductController.addProduct,
+)
+
+/**
+ * @swagger
+ * /products/import:
+ *   post:
+ *     tags:
+ *       - Products
+ *     summary: Import sản phẩm từ file Excel
+ *     description: Upload file Excel để nhập dữ liệu sản phẩm vào hệ thống.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: File Excel chứa dữ liệu sản phẩm.
+ *     responses:
+ *       200:
+ *         description: Import thành công.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Import thành công"
+ *                 imported:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         example: "Sản phẩm A"
+ *                       stock:
+ *                         type: integer
+ *                         example: 50
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       product:
+ *                         type: object
+ *                         description: Dữ liệu sản phẩm lỗi
+ *                       error:
+ *                         type: string
+ *                         description: Mô tả lỗi
+ *       400:
+ *         description: Lỗi do không có file upload hoặc file không hợp lệ.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Vui lòng upload một file Excel"
+ *       500:
+ *         description: Lỗi hệ thống.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Lỗi import sản phẩm"
+ */
+router.post(
+  Path.Product.Import,
+  authorization,
+  upload.single('file'),
+  ProductController.importProducts,
 )
 
 /**
@@ -206,6 +294,35 @@ router.get(Path.Product.All, ProductController.getAllProducts)
  *         description: Lỗi khi lấy danh sách sản phẩm
  */
 router.get(Path.Product.All, ProductController.getAllProducts)
+
+/**
+ * @swagger
+ * /products/export:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Export danh sách sản phẩm ra file Excel
+ *     description: Xuất toàn bộ sản phẩm trong hệ thống thành file Excel.
+ *     responses:
+ *       200:
+ *         description: Xuất file thành công.
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Lỗi hệ thống khi export file.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Lỗi export sản phẩm"
+ */
+router.get(Path.Product.Export, authorization, ProductController.exportProducts)
 
 /**
  * @swagger

@@ -18,6 +18,8 @@ const Path = {
     All: '/all',
     Update: '/:id',
     Search: '/search',
+    Import: '/import',
+    Export: '/export',
   },
   Admin: {
     Base: '/admin',

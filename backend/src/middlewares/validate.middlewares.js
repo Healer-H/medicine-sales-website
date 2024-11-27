@@ -23,23 +23,21 @@ const validatePassword = (passwordField = 'password') => [
 
 const validateOTP = [body('otp').isNumeric().withMessage('OTP phải là số')]
 
-
-const validateProperties = (allowedProperties) => {
+const validateProperties = allowedProperties => {
   return (req, res, next) => {
     const invalidProperties = Object.keys(req.body).filter(
-      (key) => !allowedProperties.includes(key)
-    );
+      key => !allowedProperties.includes(key),
+    )
 
     if (invalidProperties.length > 0) {
       return res.status(HttpStatusCodes.BAD_REQUEST).json({
         message: `Các thuộc tính không hợp lệ: ${invalidProperties.join(', ')}`,
-      });
+      })
     }
 
-    next();
-  };
-};
-
+    next()
+  }
+}
 
 // SPECIFIC VALIDATORS
 const validateLogin = [...validateEmail]
@@ -54,6 +52,80 @@ const validateResetPassword = [
   ...validateOTP,
 ]
 
+// PRODUCT VALIDATION RULES
+const productValidationRules = {
+  name: {
+    validate: value => {
+      if (!value) throw new Error('Trường name là bắt buộc')
+      if (!/^[\p{L}0-9 ]+$/u.test(value))
+        throw new Error('Tên sản phẩm không chứa ký tự đặc biệt')
+      if (value.length > 255)
+        throw new Error('Tên sản phẩm không được vượt quá 255 ký tự')
+      if (value.trim() !== value)
+        throw new Error(
+          'Tên sản phẩm không được chứa khoảng trắng ở đầu hoặc cuối',
+        )
+      return true
+    },
+  },
+  price: {
+    validate: value => {
+      if (value === undefined || value === null)
+        throw new Error('Trường price là bắt buộc')
+      if (!Number.isFinite(value))
+        throw new Error('Trường price phải là số hợp lệ')
+      if (value <= 0) throw new Error('Giá sản phẩm phải là số dương')
+      return true
+    },
+  },
+  stock: {
+    validate: value => {
+      if (value === undefined || value === null)
+        throw new Error('Trường stock là bắt buộc')
+      if (!Number.isInteger(value))
+        throw new Error('Trường stock phải là số hợp lệ')
+      if (value <= 0) throw new Error('Số lượng sản phẩm phải là số dương')
+      if (value > 5000)
+        throw new Error('Số lượng sản phẩm không được vượt quá 5000')
+      return true
+    },
+  },
+  expiration_date: {
+    validate: value => {
+      const now = new Date()
+      const date = new Date(value)
+      if (!value) throw new Error('Trường expiration_date là bắt buộc')
+      if (isNaN(date))
+        throw new Error('Ngày hết hạn sản phẩm phải là ngày hợp lệ')
+      if (date <= now)
+        throw new Error('Ngày hết hạn sản phẩm phải sau ngày hiện tại')
+      if (date > new Date('2035-12-31'))
+        throw new Error('Ngày hết hạn sản phẩm không được vượt quá 2035-12-31')
+      return true
+    },
+  },
+  prescription_required: {
+    validate: value => {
+      if (value === undefined || value === null)
+        throw new Error('Trường prescription_required là bắt buộc')
+      return true
+    },
+  },
+}
+
+// GENERAL VALIDATOR FUNCTION
+const validateProductData = data => {
+  const errors = []
+  Object.keys(productValidationRules).forEach(key => {
+    try {
+      productValidationRules[key].validate(data[key])
+    } catch (error) {
+      errors.push({ field: key, message: error.message })
+    }
+  })
+  return errors
+}
+
 // REQUEST VALIDATOR
 const validateRequest = (req, res, next) => {
   const errors = validationResult(req)
@@ -65,68 +137,17 @@ const validateRequest = (req, res, next) => {
   next()
 }
 
+// MIDDLEWARE VALIDATOR FUNCTION
 const validateProduct = [
-  body('name')
-    .notEmpty()
-    .withMessage('Trường name là bắt buộc')
-    .isAlphanumeric('vi-VN', { ignore: ' ' })
-    .withMessage('Tên sản phẩm không chứa ký tự đặc biệt')
-    .custom((value) => {
-      if (value.length > 255) {
-        throw new Error('Tên sản phẩm không được vượt quá 255 ký tự');
-      }
-      if (value.trim() !== value) {
-        throw new Error('Tên sản phẩm không được chứa khoảng trắng ở đầu hoặc cuối');
-      }
-      return true;
-    }),
-
-
-
-    body('price')
-    .notEmpty()
-    .withMessage('Trường price là bắt buộc')
-    .custom((value) => {
-      if (!Number.isInteger(value)) {
-        throw new Error('Trường price phải là số hợp lệ');
-      }
-      if (value <= 0) {
-        throw new Error('Giá sản phẩm phải là số dương');
-      }
-      return true;
-    }),
-
-  body('stock')
-    .notEmpty()
-    .withMessage('Trường stock là bắt buộc')
-    .isInt({ gt: 0 })
-    .custom((value) => {
-      if (!Number.isInteger(value)) {
-        throw new Error('Trường stock phải là số hợp lệ');
-      }
-      if (value <= 0) {
-        throw new Error('Số lượng sản phẩm phải là số dương');
-      }
-      if (value > 5000) {
-        throw new Error('Số lượng sản phẩm không được vượt quá 5000');
-      }
-      return true;
-    }),
-
-  body('expiration_date')
-    .notEmpty()
-    .withMessage('Trường expiration_date là bắt buộc')
-    .isDate({ format: 'YYYY-MM-DD' })
-    .withMessage('Ngày hết hạn sản phẩm phải có định dạng YYYY-MM-DD')
-    .isAfter()
-    .withMessage('Ngày hết hạn sản phẩm phải sau ngày hiện tại')
-    .isBefore('2035-12-31')
-    .withMessage('Ngày hết hạn sản phẩm không được vượt quá 2035-12-31'),
-
-  body('prescription_required')
-    .notEmpty()
-    .withMessage('Trường prescription_required là bắt buộc'),
-
+  body('name').custom(value => productValidationRules.name.validate(value)),
+  body('price').custom(value => productValidationRules.price.validate(value)),
+  body('stock').custom(value => productValidationRules.stock.validate(value)),
+  body('expiration_date').custom(value =>
+    productValidationRules.expiration_date.validate(value),
+  ),
+  body('prescription_required').custom(value =>
+    productValidationRules.prescription_required.validate(value),
+  ),
   (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -146,4 +167,5 @@ module.exports = {
   validateProduct,
   validateProperties,
   validateRequest,
+  validateProductData,
 }
