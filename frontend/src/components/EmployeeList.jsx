@@ -1,7 +1,12 @@
 // EmployeeList.jsx
 import React from "react";
+import { loadMoreData } from "../store/employeeSlice";
+import LoadMoreButton from "./LoadMoreButton";
+import { useDispatch } from "react-redux";
+
 
 const EmployeeList = ({ employees, onEdit, onDelete }) => {
+  const dispatch = useDispatch();
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Danh sách nhân viên</h1>
@@ -50,7 +55,7 @@ const EmployeeList = ({ employees, onEdit, onDelete }) => {
           ))}
         </tbody>
       </table>
-      <button className="mt-4 text-blue-500">Xem thêm</button>
+      <LoadMoreButton text={"Xem thêm"} onClick={() => dispatch(loadMoreData())} />
     </div>
   );
 };

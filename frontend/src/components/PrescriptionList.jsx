@@ -1,17 +1,21 @@
-import React from 'react';
+import React from "react";
+import LoadMoreButton from "./LoadMoreButton";
+import { loadMoreData } from "../store/prescriptionSlice";
+import { useDispatch } from "react-redux";
 
 const PrescriptionList = ({ prescriptions, onViewDetail, onDelete }) => {
+  const dispatch = useDispatch();
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Đơn Thuốc</h1>
       <table className="w-full bg-white shadow-md rounded-md">
         <thead>
-          <tr className="bg-purple-500 text-white">
-            <th className="p-2">ID Đơn Thuốc</th>
+          <tr className="bg-blue-500 text-white">
+            <th className="p-2">ID Đơn thuốc</th>
             <th className="p-2">Số BHYT</th>
             <th className="p-2">Họ và Tên</th>
-            <th className="p-2">Ngày Lưu Trữ</th>
-            <th className="p-2">Thao Tác</th>
+            <th className="p-2">Ngày lưu trữ</th>
+            <th className="p-2">Thao tác</th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +43,10 @@ const PrescriptionList = ({ prescriptions, onViewDetail, onDelete }) => {
           ))}
         </tbody>
       </table>
-      <button className="mt-4 text-blue-500">Xem thêm</button>
+      <LoadMoreButton
+        text={"Xem thêm"}
+        onClick={() => dispatch(loadMoreData())}
+      />
     </div>
   );
 };

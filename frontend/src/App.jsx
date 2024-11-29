@@ -13,17 +13,24 @@ import Reports from "./pages/Reports";
 import SettingsPage from "./pages/SettingsPage";
 import Paths from "./constants/paths";
 import store from "./store/store";
+import InvoiceDetail from "./components/InvoiceDetail";
+import EmployeeDetailTabs from "./components/EmployeeDetailTabs";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Router>
+      <Router future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}>
         <Layout>
           <Routes>
             <Route path={Paths.DASHBOARD} element={<Dashboard />} />
             <Route path={Paths.PRODUCTS} element={<Products />} />
             <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
+            <Route path={Paths.INVOICE_DETAIL} element={<InvoiceDetail />} />
             <Route path={Paths.EMPLOYEES} element={<EmployeeManagement />} />
+            <Route path={Paths.EMPLOYEE_DETAIL} element={<EmployeeDetailTabs />} />
             <Route
               path={Paths.PRESCRIPTIONS}
               element={<PrescriptionManagement />}

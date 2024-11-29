@@ -1,6 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import LoadMoreButton from './LoadMoreButton';
+import { loadMoreData } from '../store/invoiceSlice';
+import { useDispatch } from 'react-redux';
+
 
 const InvoiceList = ({ invoices, onEdit, onDelete }) => {
+  const dispatch = useDispatch();
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Danh sách hóa đơn</h1>
@@ -39,9 +45,14 @@ const InvoiceList = ({ invoices, onEdit, onDelete }) => {
           ))}
         </tbody>
       </table>
-      <button className="mt-4 text-blue-500">Xem thêm</button>
-    </div>
+      <LoadMoreButton text={"Xem thêm"} onClick={() => dispatch(loadMoreData())} />
+    </div> 
   );
+};
+InvoiceList.propTypes = {
+  invoices: PropTypes.array.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default InvoiceList;

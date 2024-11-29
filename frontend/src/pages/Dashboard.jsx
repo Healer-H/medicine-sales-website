@@ -5,16 +5,11 @@ import Header from '../components/Header';
 import DashboardCards from '../components/DashboardCards';
 import LineChart from '../components/LineChart';
 import ProductList from '../components/ProductList';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
-  const bestSelling = [
-    { name: 'Máy đo huyết áp', price: '1.240.000đ' },
-    { name: 'Sản phẩm 2', price: '1.500.000đ' },
-  ];
-  const expiringProducts = [
-    { name: 'Sản phẩm hết hạn 1', price: '2.000.000đ' },
-    { name: 'Sản phẩm hết hạn 2', price: '1.800.000đ' },
-  ];
+  const bestSelling = useSelector((state) => state.dashboard.bestSelling);
+  const expiringProducts = useSelector((state) => state.dashboard.expiringProducts);
 
   return (
     <div className="flex">

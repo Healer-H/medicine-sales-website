@@ -1,6 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-const InvoiceDetail = ({ invoice }) => {
+const InvoiceDetail = () => {
+  const { id } = useParams();
+  const invoice = useSelector(state => state.invoices.invoices.find(inv => inv.id === parseInt(id)));
+
+  if (!invoice) {
+    return <div>Invoice not found</div>;
+  }
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-4">Chi Tiết Hóa Đơn</h1>

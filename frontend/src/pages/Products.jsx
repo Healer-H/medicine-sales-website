@@ -1,44 +1,52 @@
-import React, { useState } from 'react';
-import ProductCard from '../components/ProductCard';
-import ProductRow from '../components/ProductRow';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import ProductCard from "../components/ProductCard";
+import ProductRow from "../components/ProductRow";
+import LoadMoreButton from "../components/LoadMoreButton";
+import CrudButton from "../components/CrudButton";
+import {
+  loadMoreData,
+  setViewMode,
+  setSelectedCategory,
+  selectProduct,
+  deselectProduct,
+} from "../store/productsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const categories = [
-  { name: 'Tất cả', value: 'all' },
-  { name: 'Dược phẩm', value: 'duoc-pham' },
-  { name: 'Thiết bị y tế', value: 'thiet-bi-y-te' },
-  { name: 'Chăm sóc cá nhân', value: 'cham-soc' },
-];
-
-const products = [
-  {
-    id: 1,
-    name: 'Máy đo huyết áp Omron HEM 7143T',
-    category: 'Thiết bị y tế',
-    price: '1.240.000đ',
-    status: 'In Stock',
-    image: 'https://via.placeholder.com/100',
-  },
-  {
-    id: 2,
-    name: 'Dung dịch vệ sinh Fujitsan Ion 70ml',
-    category: 'Chăm sóc cá nhân',
-    price: '50.000đ',
-    status: 'Out of Stock',
-    image: 'https://via.placeholder.com/100',
-  },
-  // Add more products here
+  { name: "Tất cả", value: "all" },
+  { name: "Dược phẩm", value: "duoc-pham" },
+  { name: "Thiết bị y tế", value: "thiet-bi-y-te" },
+  { name: "Chăm sóc cá nhân", value: "cham-soc" },
 ];
 
 const Products = () => {
-  const [viewMode, setViewMode] = useState('list'); 
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const viewMode = useSelector((state) => state.products.viewMode);
+  const products = useSelector((state) => state.products.products);
+  const selectedProducts = useSelector(
+    (state) => state.products.selectedProducts
+  );
+  const selectedCategory = useSelector(
+    (state) => state.products.selectedCategory
+  );
 
   const handleCreateProduct = () => {
-    console.log("Tạo sản phẩm mới was clicked!");
+    // Redirect to the create product page
+    navigate("/create-product");
+  };
+
+  const handleSelectProduct = (productId) => {
+    if (selectedProducts.includes(productId)) {
+      dispatch(deselectProduct(productId));
+    } else {
+      dispatch(selectProduct(productId));
+    }
   };
 
   const filteredProducts =
-    selectedCategory === 'all'
+    selectedCategory === "all"
       ? products
       : products.filter((product) => product.category === selectedCategory);
 
@@ -51,11 +59,11 @@ const Products = () => {
         {categories.map((category) => (
           <button
             key={category.value}
-            onClick={() => setSelectedCategory(category.value)}
+            onClick={() => dispatch(setSelectedCategory(category.value))}
             className={`px-4 py-1 rounded-md ${
               selectedCategory === category.value
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-600'
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-600"
             }`}
           >
             {category.name}
@@ -67,44 +75,54 @@ const Products = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => setViewMode('grid')}
+            onClick={() => dispatch(setViewMode("grid"))}
             className={`p-2 ${
-              viewMode === 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              viewMode === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >
             <span className="material-icons">grid_view</span>
           </button>
           <button
-            onClick={() => setViewMode('list')}
+            onClick={() => dispatch(setViewMode("list"))}
             className={`p-2 ${
-              viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              viewMode === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >
             <span className="material-icons">view_list</span>
           </button>
         </div>
-        <button className="bg-blue-500 text-white px-4 py-1 rounded-md" onClick={handleCreateProduct}>
-          Tạo sản phẩm mới
-        </button>
+        <CrudButton
+          type={"create"}
+          text={"Tạo sản phẩm mới"}
+          onClick={handleCreateProduct}
+        />
       </div>
 
       {/* Product Display */}
-      <div
-        className={`grid ${
-          viewMode === 'grid' ? 'grid-cols-4 gap-4' : ''
-        }`}
-      >
+      <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
         {filteredProducts.map((product) =>
-          viewMode === 'grid' ? (
-            <ProductCard key={product.id} product={product} />
+          viewMode === "grid" ? (
+            <ProductCard
+              key={product.id}
+              product={product}
+              isSelected={selectedProducts.includes(product.id)}
+              onSelect={handleSelectProduct}
+            />
           ) : (
-            <ProductRow key={product.id} product={product} />
+            <ProductRow
+              key={product.id}
+              product={product}
+              isSelected={selectedProducts.includes(product.id)}
+              onSelect={handleSelectProduct}
+            />
           )
         )}
       </div>
 
-      {/* Load More Button */}
-      <button className="mt-4 text-blue-500">Xem thêm</button>
+      <LoadMoreButton
+        text={"Xem thêm"}
+        onClick={() => dispatch(loadMoreData())}
+      />
     </div>
   );
 };
