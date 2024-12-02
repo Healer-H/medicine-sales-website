@@ -83,10 +83,17 @@ router.use(authentication)
  *         description: Lỗi khi thêm sản phẩm
  */
 router.post(
-    Path.Product.Add,
-    validateProperties(['name', 'price', 'description', 'stock', 'expiration_date', 'prescription_required']),
-    validateProduct,
-    ProductController.addProduct
+  Path.Product.Add,
+  validateProperties([
+    'name',
+    'price',
+    'description',
+    'stock',
+    'expiration_date',
+    'prescription_required',
+  ]),
+  validateProduct,
+  ProductController.addProduct,
 )
 
 /**
@@ -172,13 +179,13 @@ router.get(Path.Product.All, ProductController.getAllProducts)
 
 /**
  * @swagger
- * /products/all:
+ * /products/get-expired:
  *   get:
- *     summary: Lấy danh sách sản phẩm
+ *     summary: Lấy danh sách sản phẩm đã hết hạn
  *     tags: [Products]
  *     responses:
  *       200:
- *         description: Danh sách sản phẩm
+ *         description: Danh sách sản phẩm đã hết hạn
  *         content:
  *           application/json:
  *             schema:
@@ -202,10 +209,51 @@ router.get(Path.Product.All, ProductController.getAllProducts)
  *                     type: string
  *                     description: Mô tả sản phẩm
  *                     example: "Product Description"
+ *       401:
+ *         description: Người dùng chưa đăng nhập
  *       500:
  *         description: Lỗi khi lấy danh sách sản phẩm
  */
-router.get(Path.Product.All, ProductController.getAllProducts)
+router.get(Path.Product.GetExpired, ProductController.getExpiredProducts)
+
+/**
+ * @swagger
+ * /products/get-low-stock:
+ *   get:
+ *     summary: Lấy danh sách sản phẩm sắp hết hàng
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm sắp hết hàng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID của sản phẩm
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     description: Tên sản phẩm
+ *                     example: "Product Name"
+ *                   price:
+ *                     type: number
+ *                     description: Giá sản phẩm
+ *                     example: 100
+ *                   description:
+ *                     type: string
+ *                     description: Mô tả sản phẩm
+ *                     example: "Product Description"
+ *       401:
+ *         description: Người dùng chưa đăng nhập
+ *       500:
+ *         description: Lỗi khi lấy danh sách sản phẩm
+ */
+router.get(Path.Product.GetLowStock, ProductController.getLowStockProducts)
 
 /**
  * @swagger

@@ -70,7 +70,7 @@ class ProductController {
       next(error)
     }
   }
- 
+
   // Xóa sản phẩm
   async deleteProduct(req, res, next) {
     try {
@@ -83,6 +83,26 @@ class ProductController {
           .json({ message: response.message })
       }
       return res.status(HttpStatusCodes.OK).json({ message: response.message }) // Trả về thông báo thành công
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Lấy danh sách sản phẩm hết hạn
+  async getExpiredProducts(req, res, next) {
+    try {
+      const products = await ProductService.getExpiredProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Lấy danh sách sản phẩm sắp hết hàng
+  async getLowStockProducts(req, res, next) {
+    try {
+      const products = await ProductService.getLowStockProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
     } catch (error) {
       next(error)
     }
