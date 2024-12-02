@@ -19,6 +19,8 @@ const Path = {
     Update: '/:id',
     Search: '/search',
     TopSelling: '/top-selling',
+    GetExpired: '/get-expired',
+    GetLowStock: '/get-low-stock',
   },
   Admin: {
     Base: '/admin',
@@ -35,6 +37,14 @@ const Path = {
     CreateOrder: '/create-order',
     ExportOrder: '/export-order/:id',
     UpdateOrder: '/:id',
+    GetAllOrders: '/',
+    DeleteOrder: '/:id',
+    DeleteMultipleOrders: '/delete-multiple-orders',
+    DeleteAllOrders: '/delete-all-orders',
+  },
+  Report: {
+    Base: '/reports',
+    GetRevenueReport: '/get-revenue-report',
   },
 }
 

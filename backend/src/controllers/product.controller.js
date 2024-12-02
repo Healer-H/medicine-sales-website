@@ -70,7 +70,7 @@ class ProductController {
       next(error)
     }
   }
- 
+
   // Xóa sản phẩm
   async deleteProduct(req, res, next) {
     try {
@@ -94,6 +94,26 @@ class ProductController {
       const { startDate, endDate } = req.query
       const response = await ProductService.getTopSellingProducts(startDate, endDate)
       return res.status(HttpStatusCodes.OK).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+  // Lấy danh sách sản phẩm hết hạn
+  async getExpiredProducts(req, res, next) {
+    try {
+      const products = await ProductService.getExpiredProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Lấy danh sách sản phẩm sắp hết hàng
+  async getLowStockProducts(req, res, next) {
+    try {
+      const products = await ProductService.getLowStockProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
     } catch (error) {
       next(error)
     }
