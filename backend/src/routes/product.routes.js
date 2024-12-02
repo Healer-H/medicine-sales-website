@@ -84,12 +84,18 @@ router.use(authentication)
  *         description: Lỗi khi thêm sản phẩm
  */
 router.post(
-    Path.Product.Add,
-    validateProperties(['name', 'price', 'description', 'stock', 'expiration_date', 'prescription_required']),
-    validateProduct,
-    ProductController.addProduct
+  Path.Product.Add,
+  validateProperties([
+    'name',
+    'price',
+    'description',
+    'stock',
+    'expiration_date',
+    'prescription_required',
+  ]),
+  validateProduct,
+  ProductController.addProduct,
 )
-
 
 /**
  * @swagger
@@ -159,7 +165,11 @@ router.post(
  *       500:
  *         description: Lỗi máy chủ
  */
-router.get(Path.Product.TopSelling, authentication, validateTopSellingDates, ProductController.getTopSellingProducts)
+router.get(
+  Path.Product.TopSelling,
+  validateTopSellingDates,
+  ProductController.getTopSellingProducts,
+)
 
 /**
  * @swagger
@@ -428,6 +438,5 @@ router.put(Path.Product.Update, authorization, ProductController.updateProduct)
  *         description: Lỗi khi xóa sản phẩm
  */
 router.delete(Path.Product.Id, authorization, ProductController.deleteProduct)
-
 
 module.exports = router
