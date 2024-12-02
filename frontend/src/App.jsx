@@ -15,6 +15,7 @@ import Paths from "./constants/paths";
 import store from "./store/store";
 import InvoiceDetail from "./components/InvoiceDetail";
 import EmployeeDetailTabs from "./components/EmployeeDetailTabs";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
       }}>
         <Layout>
           <Routes>
+            <Route path={Paths.LOGIN} element={<LoginPage />} />
             <Route path={Paths.DASHBOARD} element={<Dashboard />} />
             <Route path={Paths.PRODUCTS} element={<Products />} />
             <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
