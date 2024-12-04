@@ -1,7 +1,7 @@
 // Sidebar.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import Paths from "../constants/paths";
+import { Paths } from "../constants/paths";
 import { RxDashboard } from "react-icons/rx";
 import { GiMedicines } from "react-icons/gi";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
@@ -11,9 +11,11 @@ import { LiaHospital } from "react-icons/lia";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { CiSettings } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const menuItems = [
     { name: "Dashboard", path: Paths.DASHBOARD, icon: <RxDashboard /> },
     { name: "Sản phẩm", path: Paths.PRODUCTS, icon: <GiMedicines /> },
@@ -30,27 +32,31 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="bg-white h-screen w-72 shadow-lg flex flex-col justify-between">
+    <div className="bg-white h-screen w-72 shadow-lg flex flex-col justify-between overflow-y-auto">
       <div className="p-4">
         <button
           onClick={() => navigate(Paths.DASHBOARD)}
           className="flex items-center mb-6"
         >
           <img
-            src="../public/images/transparent_logo.svg"
+            src="images/transparent_logo.svg"
             alt="Logo"
             className="h-30 w-40"
-            />
+          />
         </button>
         <ul>
           {menuItems.map((item) => (
             <li key={item.name} className="my-3">
               <Link
                 to={item.path}
-                className="text-gray-700 hover:text-blue-500 hover:bg-blue-100 flex items-center space-x-3 p-2 rounded-md"
+                className={`text-black-700 hover:text-blue-500 hover:bg-blue-100 flex items-center space-x-3 p-2 rounded-md ${
+                  location.pathname === item.path
+                    ? "bg-blue-100 text-blue-500 font-semibold"
+                    : ""
+                }`}
               >
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-lg">{item.name}</span>
+                <span className="text-2xl ">{item.icon}</span>
+                <span className="text-lg ">{item.name}</span>
               </Link>
             </li>
           ))}

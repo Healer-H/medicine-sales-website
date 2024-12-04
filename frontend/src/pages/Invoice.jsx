@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteInvoice } from '../store/invoiceSlice';
 import { useNavigate } from 'react-router-dom';
 import InvoiceList from '../components/InvoiceList';
-import InvoiceDetail from '../components/InvoiceDetail';
 
 const InvoiceManagement = () => {
   const invoices = useSelector(state => state.invoices.invoices);

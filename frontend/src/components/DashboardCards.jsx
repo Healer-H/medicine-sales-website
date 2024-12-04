@@ -26,12 +26,12 @@ const DashboardCards = () => {
       {cards.map((card, index) => (
         <div
           key={index}
-          className="bg-white p-4 shadow-md rounded-md flex justify-between items-top"
+          className="bg-cyan-50 p-4 shadow-md rounded-md flex justify-between items-top"
         >
           <div>
-            <h3 className="text-lg font-bold">{card.title}</h3>
-            <p className="text-2xl font-semibold">{card.value}</p>
-            <p className={`text-sm ${card.color}`}>{card.change}</p>
+            <h3 className="text-lg pt-2 ">{card.title}</h3>
+            <p className="text-3xl font-semibold pt-2">{card.value}</p>
+            <p className={`text-lg font-bold pt-2 ${card.color}`}>{card.change}</p>
           </div>
           {card.icon}
         </div>

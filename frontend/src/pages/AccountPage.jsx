@@ -7,7 +7,6 @@ const AccountPage = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Chi Tiết Người Dùng</h1>
       <div className="bg-white p-4 shadow-md rounded-md">
         <div className="flex space-x-4 mb-4">
           <button

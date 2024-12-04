@@ -7,7 +7,6 @@ const PrescriptionList = ({ prescriptions, onViewDetail, onDelete }) => {
   const dispatch = useDispatch();
   return (
     <div>
-      <h1 className="text-xl font-bold mb-4">Đơn Thuốc</h1>
       <table className="w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-blue-500 text-white">
