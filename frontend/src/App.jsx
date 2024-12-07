@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
+import ProductDetail from "./components/ProductDetail";
 import InvoiceManagement from "./pages/Invoice";
 import Layout from "./components/Layout";
 import { Provider } from "react-redux";
@@ -37,7 +38,11 @@ const App = () => {
                   <Route element={<ProtectedRoutes />}>
                     <Route path={Paths.DASHBOARD} element={<Dashboard />} />
                     <Route path={Paths.PRODUCTS} element={<Products />} />
-                    <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
+                    <Route
+                    path={Paths.PRODUCT_DETAIL}
+                    element={<ProductDetail />}
+                  />
+                  <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
                     <Route path={Paths.INVOICE_DETAIL} element={<InvoiceDetail />} />
                     <Route path={Paths.EMPLOYEES} element={<EmployeeManagement />} />
                     <Route path={Paths.EMPLOYEE_DETAIL} element={<EmployeeDetailTabs />} />
