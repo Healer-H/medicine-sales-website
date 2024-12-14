@@ -19,6 +19,7 @@ const Path = {
     All: '/all',
     Update: '/:id',
     Search: '/search',
+    TopSelling: '/top-selling',
     GetExpired: '/get-expired',
     GetLowStock: '/get-low-stock',
   },
