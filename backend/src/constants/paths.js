@@ -10,6 +10,7 @@ const Path = {
     Logout: '/logout',
     ForgotPassword: '/forgot-password',
     ResetPassword: '/reset-password',
+    GetProfile: '/profile',
   },
   Product: {
     Base: '/products',

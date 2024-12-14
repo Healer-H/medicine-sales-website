@@ -144,6 +144,16 @@ class UserControllers {
       next(error)
     }
   }
+
+  async getProfile(req, res, next) {
+    try {
+      const userId = req.user.id
+      const user = await userServices.getProfile(userId)
+      res.status(HttpStatusCodes.OK).json(user)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 module.exports = new UserControllers()

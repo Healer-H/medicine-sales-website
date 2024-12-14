@@ -258,6 +258,17 @@ class UserServices {
       throw new Error(`Patch user service error: ${error}`)
     }
   }
+
+  async getProfile(userId) {
+    try {
+      const user = await User.findByPk(userId, {
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      })
+      return user
+    } catch (error) {
+      throw new Error(`Get profile service error: ${error}`)
+    }
+  }
 }
 
 module.exports = new UserServices()
