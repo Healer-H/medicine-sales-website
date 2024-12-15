@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/api'; // Import hàm login từ api.js
+import userService from '../services/api/userService'; // Import hàm login từ api.js
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,14 +13,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const credentials = { email, password };
-    const response = await login(credentials);
-    console.log(response);
-    if (response.success) {
-      // Chuyển hướng sang trang Dashboard
-      navigate('/');
-    } else {
-      // Hiển thị thông báo lỗi
-      setError(response.message);
+    try {
+      const response = await userService.login(credentials);
+      Cookies.set('access_token', response.access_token); // Lưu token vào cookies
+      navigate('/')
+    } catch (err) {
+      setError(err.message); // Lỗi đã được chuẩn hóa qua interceptor
     }
   };
 

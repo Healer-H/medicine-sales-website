@@ -7,7 +7,7 @@ const ProductCard = ({ product, onSelect, isSelected }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product.product_id}`);
   };
 
   return (
@@ -16,7 +16,7 @@ const ProductCard = ({ product, onSelect, isSelected }) => {
         type="checkbox"
         className="absolute top-2 left-2"
         checked={isSelected}
-        onChange={() => onSelect(product.id)}
+        onChange={() => onSelect(product.product_id)}
       />
       <div onClick={handleCardClick} className="cursor-pointer w-full flex flex-col items-center">
         <img src={product.image} alt={product.name} className="w-32 h-32 mb-4" />

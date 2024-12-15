@@ -8,7 +8,7 @@ const ProductRow = ({ product, isSelected, onSelect }) => {
         type="checkbox"
         className="mr-4"
         checked={isSelected}
-        onChange={() => onSelect(product.id)}
+        onChange={() => onSelect(product.product_id)}
       />
       <img src={product.image} alt={product.name} className="w-16 h-16 mr-4" />
       <div className="flex-1">

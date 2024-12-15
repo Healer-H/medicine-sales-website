@@ -34,10 +34,23 @@ class ProductService {
   }
 
   // Lấy danh sách sản phẩm
-  async getAllProducts() {
+  // Lấy danh sách sản phẩm với phân trang
+  async getAllProducts(page = 1, limit = 10) {
     try {
-      const products = await Product.findAll()
-      return products
+      const offset = (page - 1) * limit
+      const { count, rows: products } = await Product.findAndCountAll({
+        offset,
+        limit,
+      })
+      return {
+        success: true,
+        data: {
+          totalItems: count,
+          totalPages: Math.ceil(count / limit),
+          currentPage: page,
+          products,
+        },
+      }
     } catch (error) {
       throw new Error('Error while retrieving products: ' + error.message)
     }

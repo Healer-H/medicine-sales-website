@@ -26,11 +26,13 @@ class ProductController {
     }
   }
 
-  // Lấy danh sách sản phẩm
+  // Lấy danh sách sản phẩm với phân trang
   async getAllProducts(req, res, next) {
     try {
-      const products = await ProductService.getAllProducts()
-      return res.status(HttpStatusCodes.OK).json(products)
+      const page = parseInt(req.query.page) || 1
+      const limit = parseInt(req.query.limit) || 10
+      const response = await ProductService.getAllProducts(page, limit)
+      return res.status(HttpStatusCodes.OK).json(response.data)
     } catch (error) {
       next(error)
     }
