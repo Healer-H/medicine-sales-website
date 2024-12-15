@@ -501,6 +501,43 @@ const {
 
 /**
  * @swagger
+ * /user/profile:
+ *   get:
+ *     summary: Xem thông tin cá nhân
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Thông tin cá nhân của người dùng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: 12345
+ *                 username:
+ *                   type: string
+ *                   example: johndoe
+ *                 email:
+ *                   type: string
+ *                   example: johndoe@example.com
+ *       500:
+ *         description: Lỗi máy chủ nội bộ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Đã xảy ra lỗi khi lấy thông tin người dùng
+ */
+
+/**
+ * @swagger
  * /admin/delete-all-users:
  *   delete:
  *     summary: Xóa tất cả người dùng
@@ -541,6 +578,7 @@ const {
  *       500:
  *         description: Lỗi server
  */
+
 /**
  * @swagger
  * /admin/delete-multiple-users:
@@ -611,6 +649,7 @@ Router.post(
   validateRequest,
   userControllers.resetPassword,
 )
+Router.get(Path.User.GetProfile, authentication, userControllers.getProfile)
 
 Router.use(authentication, authorization)
 Router.get(Path.Admin.GetAllUser, userControllers.getAllUser)

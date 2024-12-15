@@ -9,6 +9,7 @@ const {
 const {
   validateProperties,
   validateProduct,
+  validateTopSellingDates,
 } = require('../middlewares/validate.middlewares')
 
 router.use(authentication)
@@ -83,10 +84,91 @@ router.use(authentication)
  *         description: Lỗi khi thêm sản phẩm
  */
 router.post(
-    Path.Product.Add,
-    validateProperties(['name', 'price', 'description', 'stock', 'expiration_date', 'prescription_required']),
-    validateProduct,
-    ProductController.addProduct
+  Path.Product.Add,
+  validateProperties([
+    'name',
+    'price',
+    'description',
+    'stock',
+    'expiration_date',
+    'prescription_required',
+  ]),
+  validateProduct,
+  ProductController.addProduct,
+)
+
+/**
+ * @swagger
+ * /products/top-selling:
+ *   get:
+ *     summary: Lấy danh sách sản phẩm bán chạy nhất
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: false
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         required: false
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm bán chạy nhất
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Danh sách sản phẩm bán chạy nhất."
+ *                 topSellingProducts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       productId:
+ *                         type: string
+ *                         example: "12345"
+ *                       productName:
+ *                         type: string
+ *                         example: "Product A"
+ *                       totalSold:
+ *                         type: integer
+ *                         example: 1000
+ *                       totalRevenue:
+ *                         type: number
+ *                         format: float
+ *                         example: 500000
+ *       400:
+ *         description: Đầu vào không hợp lệ
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         example: "Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng YYYY-MM-DD."
+ *       401:
+ *         description: Không có quyền truy cập
+ *       500:
+ *         description: Lỗi máy chủ
+ */
+router.get(
+  Path.Product.TopSelling,
+  validateTopSellingDates,
+  ProductController.getTopSellingProducts,
 )
 
 /**
@@ -172,13 +254,13 @@ router.get(Path.Product.All, ProductController.getAllProducts)
 
 /**
  * @swagger
- * /products/all:
+ * /products/get-expired:
  *   get:
- *     summary: Lấy danh sách sản phẩm
+ *     summary: Lấy danh sách sản phẩm đã hết hạn
  *     tags: [Products]
  *     responses:
  *       200:
- *         description: Danh sách sản phẩm
+ *         description: Danh sách sản phẩm đã hết hạn
  *         content:
  *           application/json:
  *             schema:
@@ -202,10 +284,51 @@ router.get(Path.Product.All, ProductController.getAllProducts)
  *                     type: string
  *                     description: Mô tả sản phẩm
  *                     example: "Product Description"
+ *       401:
+ *         description: Người dùng chưa đăng nhập
  *       500:
  *         description: Lỗi khi lấy danh sách sản phẩm
  */
-router.get(Path.Product.All, ProductController.getAllProducts)
+router.get(Path.Product.GetExpired, ProductController.getExpiredProducts)
+
+/**
+ * @swagger
+ * /products/get-low-stock:
+ *   get:
+ *     summary: Lấy danh sách sản phẩm sắp hết hàng
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm sắp hết hàng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID của sản phẩm
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     description: Tên sản phẩm
+ *                     example: "Product Name"
+ *                   price:
+ *                     type: number
+ *                     description: Giá sản phẩm
+ *                     example: 100
+ *                   description:
+ *                     type: string
+ *                     description: Mô tả sản phẩm
+ *                     example: "Product Description"
+ *       401:
+ *         description: Người dùng chưa đăng nhập
+ *       500:
+ *         description: Lỗi khi lấy danh sách sản phẩm
+ */
+router.get(Path.Product.GetLowStock, ProductController.getLowStockProducts)
 
 /**
  * @swagger
