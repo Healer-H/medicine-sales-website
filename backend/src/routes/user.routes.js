@@ -535,6 +535,101 @@ const {
  *                   type: string
  *                   example: Đã xảy ra lỗi khi lấy thông tin người dùng
  */
+
+/**
+ * @swagger
+ * /admin/delete-all-users:
+ *   delete:
+ *     summary: Xóa tất cả người dùng
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Tất cả người dùng đã được xóa thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Tất cả người dùng đã được xóa thành công
+ *       401:
+ *         description: Người dùng chưa đăng nhập
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token chưa được cung cấp.
+ *       403:
+ *         description:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Bạn không có quyền truy cập
+ *       500:
+ *         description: Lỗi server
+ */
+
+/**
+ * @swagger
+ * /admin/delete-multiple-users:
+ *   delete:
+ *     summary: Xóa nhiều người dùng
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             userIds:
+ *              type: string
+ *              example: [12345, 67890]
+ *     responses:
+ *       200:
+ *         description: Người dùng đã được xóa thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Người dùng đã được xóa thành công
+ *       401:
+ *         description: Người dùng chưa đăng nhập
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token chưa được cung cấp.
+ *       403:
+ *         description:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Bạn không có quyền truy cập
+ *       500:
+ *         description: Lỗi server
+ */
 Router.post(
   Path.User.Login,
   validateLogin,
@@ -565,6 +660,11 @@ Router.post(
   validateRequest,
   userControllers.createUser,
 )
+Router.delete(
+  Path.Admin.DeleteMultipleUsers,
+  userControllers.deleteMultipleUsers,
+)
+Router.delete(Path.Admin.DeleteAllUsers, userControllers.deleteAllUsers)
 Router.delete(Path.Admin.DeleteUser, userControllers.deleteUser)
 Router.put(Path.Admin.PutUser, userControllers.putUser)
 Router.patch(Path.Admin.PatchUser, userControllers.patchUser)

@@ -259,6 +259,30 @@ class UserServices {
     }
   }
 
+  async deleteMultipleUsers(userIds) {
+    try {
+      await User.destroy({ where: { id: userIds } })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete multiple users service error: ${error}`)
+    }
+  }
+
+  async deleteAllUsers() {
+    try {
+      await User.destroy({ where: {} })
+      return {
+        success: true,
+        message: Messages.USERS_MESSAGES.ADMIN.USER.DELETE.SUCCESS,
+      }
+    } catch (error) {
+      throw new Error(`Delete all users service error: ${error}`)
+    }
+  }
+  
   async getProfile(userId) {
     try {
       const user = await User.findByPk(userId, {
