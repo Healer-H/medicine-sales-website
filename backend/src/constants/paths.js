@@ -10,6 +10,7 @@ const Path = {
     Logout: '/logout',
     ForgotPassword: '/forgot-password',
     ResetPassword: '/reset-password',
+    GetProfile: '/profile',
   },
   Product: {
     Base: '/products',
@@ -20,6 +21,9 @@ const Path = {
     Search: '/search',
     Import: '/import',
     Export: '/export',
+    TopSelling: '/top-selling',
+    GetExpired: '/get-expired',
+    GetLowStock: '/get-low-stock',
   },
   Admin: {
     Base: '/admin',
@@ -36,6 +40,10 @@ const Path = {
     CreateOrder: '/create-order',
     ExportOrder: '/export-order/:id',
     UpdateOrder: '/:id',
+    GetAllOrders: '/',
+    DeleteOrder: '/:id',
+    DeleteMultipleOrders: '/delete-multiple-orders',
+    DeleteAllOrders: '/delete-all-orders',
   },
   Report: {
     Base: '/reports',

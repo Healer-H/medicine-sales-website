@@ -1,5 +1,7 @@
 // services/productService.js
 const Product = require('../models/product.model')
+const OrderDetail = require('../models/orderDetail.model')
+const { sequelize } = require('../config/database.configs')
 const Messages = require('../constants/messages')
 const { Op } = require('sequelize')
 const { readExcelFile, createExcelFile } = require('../utils/excel')
@@ -111,7 +113,7 @@ class ProductService {
     }
   }
 
-  // Import sản phẩm từ file excel
+    // Import sản phẩm từ file excel
   async importProducts(fileBuffer) {
     try {
       const errors = []
@@ -172,6 +174,74 @@ class ProductService {
       )
     } catch (error) {
       throw new Error(`Error while exporting products: ${error.message}`)
+    }
+  }
+  
+  // Lấy danh sách sản phẩm bán chạy
+  async getTopSellingProducts(startDate, endDate) {
+    try {
+      const whereClause = {}
+      if (startDate) whereClause.createdAt = { [Op.gte]: new Date(startDate) }
+      if (endDate) whereClause.createdAt = { [Op.lte]: new Date(endDate) }
+
+      const topSellingProducts = await OrderDetail.findAll({
+        attributes: [
+          'productId',
+          [sequelize.fn('SUM', sequelize.col('quantity')), 'totalSold'],
+          [sequelize.fn('SUM', sequelize.col('totalPrice')), 'totalRevenue'],
+        ],
+        // where: whereClause,
+        group: ['productId'],
+        include: [{ model: Product, attributes: ['name'] }],
+        order: [[sequelize.fn('SUM', sequelize.col('quantity')), 'DESC']],
+      })
+
+      return topSellingProducts.map(product => ({
+        productId: product.productId,
+        productName: product.Product.name,
+        totalSold: product.dataValues.totalSold,
+        totalRevenue: product.dataValues.totalRevenue,
+      }))
+    } catch (error) {
+      throw new Error(
+        'Error while retrieving top selling products: ' + error.message,
+      )
+    }
+  }
+
+  // Lấy danh sách sản phẩm hết hạn
+  async getExpiredProducts() {
+    try {
+      const products = await Product.findAll({
+        where: {
+          expiration_date: {
+            [Op.lt]: new Date(),
+          },
+        },
+      })
+      return products
+    } catch (error) {
+      throw new Error(
+        'Error while retrieving expired products: ' + error.message,
+      )
+    }
+  }
+
+  // Lấy danh sách sản phẩm sắp hết hàng
+  async getLowStockProducts() {
+    try {
+      const products = await Product.findAll({
+        where: {
+          stock: {
+            [Op.lt]: 10,
+          },
+        },
+      })
+      return products
+    } catch (error) {
+      throw new Error(
+        'Error while retrieving low stock products: ' + error.message,
+      )
     }
   }
 }

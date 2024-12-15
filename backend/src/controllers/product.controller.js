@@ -1,8 +1,8 @@
+const ProductService = require('../services/product.service')
 const HttpStatusCodes = require('../constants/httpStatusCodes')
+const Messages = require('../constants/messages')
 
 // controllers/productController.js
-const ProductService = require('../services/product.service')
-
 class ProductController {
   // Thêm sản phẩm mới
   async addProduct(req, res, next) {
@@ -88,7 +88,7 @@ class ProductController {
     }
   }
 
-  // Import sản phẩm
+    // Import sản phẩm
   async importProducts(req, res, next) {
     try {
       const fileBuffer = req.file.buffer
@@ -128,6 +128,37 @@ class ProductController {
         'attachment; filename="products.xlsx"',
       )
       res.status(HttpStatusCodes.OK).send(fileBuffer)
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+  // Lấy danh sách sản phẩm bán chạy
+  async getTopSellingProducts(req, res, next) {
+    try {
+      const { startDate, endDate } = req.query
+      const response = await ProductService.getTopSellingProducts(startDate, endDate)
+      return res.status(HttpStatusCodes.OK).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+  
+  // Lấy danh sách sản phẩm hết hạn
+  async getExpiredProducts(req, res, next) {
+    try {
+      const products = await ProductService.getExpiredProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Lấy danh sách sản phẩm sắp hết hàng
+  async getLowStockProducts(req, res, next) {
+    try {
+      const products = await ProductService.getLowStockProducts()
+      return res.status(HttpStatusCodes.OK).json(products)
     } catch (error) {
       next(error)
     }

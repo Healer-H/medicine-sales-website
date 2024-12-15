@@ -1,6 +1,7 @@
 // middleware/validators.js
-const { body, validationResult } = require('express-validator')
+const { body, query, validationResult } = require('express-validator')
 const HttpStatusCodes = require('../constants/httpStatusCodes')
+const Messages = require('../constants/messages')
 
 // BASE VALIDATORS
 const validateEmail = [
@@ -159,6 +160,50 @@ const validateProduct = [
   },
 ]
 
+
+const validateTopSellingDates = [
+  query('startDate')
+    .isDate({ format: 'YYYY-MM-DD' })
+    .withMessage(Messages.PRODUCTS_MESSAGES.TOP_SELLING.INVALID_DATE_FORMAT),
+  query('endDate')
+    .isDate({ format: 'YYYY-MM-DD' })
+    .withMessage(Messages.PRODUCTS_MESSAGES.TOP_SELLING.INVALID_DATE_FORMAT),
+  // Ngày bắt đầu không được sau ngày kết thúc
+  query('endDate').custom((endDate, { req }) => {
+    const startDate = req.query.startDate
+    if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+      throw new Error(Messages.PRODUCTS_MESSAGES.TOP_SELLING.INVALID_DATE_RANGE)
+    }
+    return true
+  }),
+  // Truy vấn không được quá 1 năm
+  query('endDate').custom((endDate, { req }) => {
+    const startDate = req.query.startDate
+    if (startDate && endDate) {
+      const oneYearLater = new Date(startDate)
+      oneYearLater.setFullYear(oneYearLater.getFullYear() + 1)
+      if (new Date(endDate) > oneYearLater) {
+        throw new Error(Messages.PRODUCTS_MESSAGES.TOP_SELLING.DATE_RANGE_TOO_LARGE)
+      }
+    }
+    return true
+  }),
+  // Ngày kết thúc không được lớn hơn ngày hiện tại
+  query('endDate').custom((endDate) => {
+    if (endDate && new Date(endDate) > new Date()) {
+      throw new Error(Messages.PRODUCTS_MESSAGES.TOP_SELLING.END_DATE_EXCEEDS_CURRENT)
+    }
+    return true
+  }),
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({ errors: errors.array() })
+    }
+    next()
+  },
+]
+
 module.exports = {
   validateLogin,
   validateCreateUser,
@@ -168,4 +213,5 @@ module.exports = {
   validateProperties,
   validateRequest,
   validateProductData,
+  validateTopSellingDates,
 }
