@@ -16,6 +16,7 @@ import store from "./store/store";
 import InvoiceDetail from "./components/InvoiceDetail";
 import EmployeeDetailTabs from "./components/EmployeeDetailTabs";
 import LoginPage from "./pages/LoginPage";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const App = () => {
   return (
@@ -33,31 +34,18 @@ const App = () => {
             element={
               <Layout>
                 <Routes>
-                  <Route path={Paths.DASHBOARD} element={<Dashboard />} />
-                  <Route path={Paths.PRODUCTS} element={<Products />} />
-                  <Route
-                    path={Paths.INVOICES}
-                    element={<InvoiceManagement />}
-                  />
-                  <Route
-                    path={Paths.INVOICE_DETAIL}
-                    element={<InvoiceDetail />}
-                  />
-                  <Route
-                    path={Paths.EMPLOYEES}
-                    element={<EmployeeManagement />}
-                  />
-                  <Route
-                    path={Paths.EMPLOYEE_DETAIL}
-                    element={<EmployeeDetailTabs />}
-                  />
-                  <Route
-                    path={Paths.PRESCRIPTIONS}
-                    element={<PrescriptionManagement />}
-                  />
-                  <Route path={Paths.ACCOUNT} element={<AccountPage />} />
-                  <Route path={Paths.REPORTS} element={<Reports />} />
-                  <Route path={Paths.SETTINGS} element={<SettingsPage />} />
+                  <Route element={<ProtectedRoutes />}>
+                    <Route path={Paths.DASHBOARD} element={<Dashboard />} />
+                    <Route path={Paths.PRODUCTS} element={<Products />} />
+                    <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
+                    <Route path={Paths.INVOICE_DETAIL} element={<InvoiceDetail />} />
+                    <Route path={Paths.EMPLOYEES} element={<EmployeeManagement />} />
+                    <Route path={Paths.EMPLOYEE_DETAIL} element={<EmployeeDetailTabs />} />
+                    <Route path={Paths.PRESCRIPTIONS} element={<PrescriptionManagement />} />
+                    <Route path={Paths.ACCOUNT} element={<AccountPage />} />
+                    <Route path={Paths.REPORTS} element={<Reports />} />
+                    <Route path={Paths.SETTINGS} element={<SettingsPage />} />
+                  </Route>
                 </Routes>
               </Layout>
             }

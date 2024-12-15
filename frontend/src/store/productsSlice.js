@@ -1,49 +1,46 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import productService from "../services/api/productService";
+
+// Async thunks
+export const fetchInitialProducts = createAsyncThunk(
+  "products/fetchAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await productService.getAll();
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const loadMoreData = createAsyncThunk(
+  "products/loadMoreData",
+  async (_, { getState, rejectWithValue }) => {
+    const { page } = getState().products;
+    try {
+      const response = await productService.getAll({ page: page + 1 });
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 const initialState = {
-  data: [],
-  products: [
-    {
-      id: 1,
-      name: "Máy đo huyết áp Omron HEM 7143T",
-      category: "Thiết bị y tế",
-      price: "1.240.000đ",
-      status: "In Stock",
-      image: "https://placehold.co/300",
-    },
-    {
-      id: 2,
-      name: "Dung dịch vệ sinh Fujitsan Ion 70ml",
-      category: "Chăm sóc cá nhân",
-      price: "50.000đ",
-      status: "Out of Stock",
-      image: "https://placehold.co/300",
-    },
-  ],
+  products: [],
   page: 1,
   viewMode: "list",
   selectedCategory: "all",
   selectedProducts: [],
+  loading: false,
+  error: null,
 };
 
 const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    loadMoreData: (state) => {
-      console.log("Load more data");
-      const newData = [
-        {
-          id: 3,
-          name: "Máy đo đường huyết Gluco Dr Super Sensor",
-          category: "Thiết bị y tế",
-          price: "1.200.000đ",
-          status: "In Stock",
-          image: "https://placehold.co/300",
-        }
-      ];
-      state.products = [...state.products, ...newData];
-    },
     setViewMode: (state, action) => {
       state.viewMode = action.payload;
     },
@@ -55,12 +52,48 @@ const productsSlice = createSlice({
     },
     deselectProduct: (state, action) => {
       state.selectedProducts = state.selectedProducts.filter(
-        (id) => id !== action.payload
+        (id) => id !== action.payload,
       );
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchInitialProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchInitialProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload.products || [];
+        state.page = 1; // Reset page to 1 after initial fetch
+      })
+      .addCase(fetchInitialProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(loadMoreData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loadMoreData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.page += 1;
+        state.products = [
+          ...state.products,
+          ...(action.payload.products || []),
+        ];
+      })
+      .addCase(loadMoreData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
 
-export const { loadMoreData, setViewMode, setSelectedCategory, selectProduct, deselectProduct } =
-  productsSlice.actions;
+export const {
+  setViewMode,
+  setSelectedCategory,
+  selectProduct,
+  deselectProduct,
+} = productsSlice.actions;
 export default productsSlice.reducer;

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import ProductRow from "../components/ProductRow";
 import LoadMoreButton from "../components/LoadMoreButton";
 import CrudButton from "../components/CrudButton";
+import Spinner from "../components/Spinner";
 import Subheader from "../components/SubHeader";
 import {
+  fetchInitialProducts,
   loadMoreData,
   setViewMode,
   setSelectedCategory,
@@ -24,19 +26,15 @@ const categories = [
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const viewMode = useSelector((state) => state.products.viewMode);
-  const products = useSelector((state) => state.products.products);
-  const selectedProducts = useSelector(
-    (state) => state.products.selectedProducts
-  );
-  const selectedCategory = useSelector(
-    (state) => state.products.selectedCategory
-  );
+  const { viewMode, products, selectedProducts, selectedCategory, loading, error } = useSelector((state) => state.products);
 
+  useEffect(() => {
+    dispatch(fetchInitialProducts());
+  }, [dispatch]);
   const handleCreateProduct = () => {
     // Redirect to the create product page
     navigate("/create-product");
-  };
+  }
 
   const handleSelectProduct = (productId) => {
     if (selectedProducts.includes(productId)) {
@@ -50,6 +48,15 @@ const Products = () => {
     selectedCategory === "all"
       ? products
       : products.filter((product) => product.category === selectedCategory);
+  console.log(filteredProducts);
+  // Hiển thị trạng thái  
+  if (loading) {  
+    return <Spinner size="md" color="green-500" /> 
+  }  
+
+  if (!loading && error) {  
+    return <div>Error: {error}</div>;  
+  }  
 
   return (
     <div>
@@ -105,26 +112,31 @@ const Products = () => {
         {filteredProducts.map((product) =>
           viewMode === "grid" ? (
             <ProductCard
-              key={product.id}
+              key={product.product_id}
               product={product}
-              isSelected={selectedProducts.includes(product.id)}
+              isSelected={selectedProducts.includes(product.product_id)}
               onSelect={handleSelectProduct}
             />
           ) : (
             <ProductRow
-              key={product.id}
+              key={product.product_id}
               product={product}
-              isSelected={selectedProducts.includes(product.id)}
+              isSelected={selectedProducts.includes(product.product_id)}
               onSelect={handleSelectProduct}
             />
           )
         )}
       </div>
 
-      <LoadMoreButton
-        text={"Xem thêm"}
-        onClick={() => dispatch(loadMoreData())}
-      />
+      {filteredProducts.length === 0 && (
+        <div className="text-center text-gray-500">Không có sản phẩm nào</div>
+      )}
+      {filteredProducts.length > 0 && (
+        <LoadMoreButton
+          text={"Xem thêm"}
+          onClick={() => dispatch(loadMoreData())}
+        />
+      )}
     </div>
   );
 };

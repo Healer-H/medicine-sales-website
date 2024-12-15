@@ -14,6 +14,7 @@ const {
 const upload = require('../middlewares/upload.middleware')
 
 router.use(authentication)
+
 /**
  * @swagger
  * tags:
@@ -302,32 +303,62 @@ router.get(Path.Product.Search, ProductController.searchProduct)
  *   get:
  *     summary: Lấy danh sách sản phẩm
  *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         required: false
+ *         description: Số trang
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         required: false
+ *         description: Số lượng sản phẩm mỗi trang
  *     responses:
  *       200:
  *         description: Danh sách sản phẩm
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     description: ID của sản phẩm
- *                     example: 1
- *                   name:
- *                     type: string
- *                     description: Tên sản phẩm
- *                     example: "Product Name"
- *                   price:
- *                     type: number
- *                     description: Giá sản phẩm
- *                     example: 100
- *                   description:
- *                     type: string
- *                     description: Mô tả sản phẩm
- *                     example: "Product Description"
+ *               type: object
+ *               properties:
+ *                 totalItems:
+ *                   type: integer
+ *                   description: Tổng số sản phẩm
+ *                   example: 100
+ *                 totalPages:
+ *                   type: integer
+ *                   description: Tổng số trang
+ *                   example: 10
+ *                 currentPage:
+ *                   type: integer
+ *                   description: Trang hiện tại
+ *                   example: 1
+ *                 products:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: ID của sản phẩm
+ *                         example: 1
+ *                       name:
+ *                         type: string
+ *                         description: Tên sản phẩm
+ *                         example: "Product Name"
+ *                       price:
+ *                         type: number
+ *                         description: Giá sản phẩm
+ *                         example: 100
+ *                       description:
+ *                         type: string
+ *                         description: Mô tả sản phẩm
+ *                         example: "Product Description"
  *       500:
  *         description: Lỗi khi lấy danh sách sản phẩm
  */

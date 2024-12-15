@@ -12,6 +12,7 @@ import { RiAccountCircleLine } from "react-icons/ri";
 import { CiSettings } from "react-icons/ci";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -30,6 +31,16 @@ const Sidebar = () => {
     { name: "Tài khoản", path: Paths.ACCOUNT, icon: <RiAccountCircleLine /> },
     { name: "Cài đặt", path: Paths.SETTINGS, icon: <CiSettings /> },
   ];
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      Cookies.remove("access_token");
+      window.location.href = Paths.LOGIN;
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <div className="bg-white h-screen w-72 shadow-lg flex flex-col justify-between overflow-y-auto">
@@ -63,7 +74,10 @@ const Sidebar = () => {
         </ul>
       </div>
       <div className="p-4">
-        <button className="bg-blue-500 text-white py-3 px-4 rounded-md w-full flex items-center justify-center space-x-2">
+        <button
+          onClick={handleLogout}
+          className="bg-blue-500 text-white py-3 px-4 rounded-md w-full flex items-center justify-center space-x-2"
+        >
           <IoIosLogOut className="text-2xl" />
           <span className="text-lg">Đăng xuất</span>
         </button>
