@@ -88,6 +88,51 @@ class ProductController {
     }
   }
 
+    // Import sản phẩm
+  async importProducts(req, res, next) {
+    try {
+      const fileBuffer = req.file.buffer
+
+      // Gọi service để xử lý import
+      const response = await ProductService.importProducts(fileBuffer)
+
+      if (response.errors.length > 0) {
+        return res.status(HttpStatusCodes.BAD_REQUEST).json({
+          success: false,
+          message:
+            'Một số sản phẩm không thể import được. Vui lòng kiểm tra lại.',
+          errors: response.errors, // Danh sách lỗi
+        })
+      }
+
+      res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: response.message,
+        products: response.products,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // Export sản phẩm
+  async exportProducts(req, res, next) {
+    try {
+      const fileBuffer = await ProductService.exportProducts()
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      )
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename="products.xlsx"',
+      )
+      res.status(HttpStatusCodes.OK).send(fileBuffer)
+    } catch (error) {
+      next(error)
+    }
+  }
+  
   // Lấy danh sách sản phẩm bán chạy
   async getTopSellingProducts(req, res, next) {
     try {

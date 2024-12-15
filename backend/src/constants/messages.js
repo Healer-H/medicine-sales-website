@@ -98,6 +98,15 @@ const PRODUCTS_MESSAGES = {
     SUCCESS: 'Danh sách sản phẩm.',
     NOT_FOUND: 'Không tìm thấy sản phẩm.',
   },
+  IMPORT: {
+    SUCCESS: 'Dữ liệu đã được nhập thành công.',
+    INVALID_FILE: 'File không hợp lệ.',
+    NO_FILE: 'Không có file để nhập. Vui lòng chọn file.',
+  },
+  EXPORT: {
+    SUCCESS: 'Dữ liệu đã được xuất thành công.',
+    NO_RESULTS: 'Không có dữ liệu để xuất.',
+  },
   TOP_SELLING: {
     SUCCESS: 'Danh sách sản phẩm bán chạy nhất.',
     INVALID_DATE_FORMAT: 'Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng YYYY-MM-DD.',

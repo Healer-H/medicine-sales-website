@@ -19,6 +19,8 @@ const Path = {
     All: '/all',
     Update: '/:id',
     Search: '/search',
+    Import: '/import',
+    Export: '/export',
     TopSelling: '/top-selling',
     GetExpired: '/get-expired',
     GetLowStock: '/get-low-stock',
