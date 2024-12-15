@@ -50,7 +50,7 @@ const Sidebar = () => {
           className="flex items-center mb-6"
         >
           <img
-            src="images/transparent_logo.svg"
+            src="/images/transparent_logo.svg"
             alt="Logo"
             className="h-30 w-40"
           />

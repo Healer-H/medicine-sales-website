@@ -6,6 +6,9 @@ import LoadMoreButton from "../components/LoadMoreButton";
 import CrudButton from "../components/CrudButton";
 import Spinner from "../components/Spinner";
 import Subheader from "../components/SubHeader";
+import { IoGridOutline } from "react-icons/io5";
+import { FaList } from "react-icons/fa6";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import {
   fetchInitialProducts,
   loadMoreData,
@@ -13,6 +16,7 @@ import {
   setSelectedCategory,
   selectProduct,
   deselectProduct,
+  deleteProduct,
 } from "../store/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -45,7 +49,7 @@ const Products = () => {
   };
 
   const filteredProducts =
-    selectedCategory === "all"
+    selectedCategory === "Tất cả"
       ? products
       : products.filter((product) => product.category === selectedCategory);
   console.log(filteredProducts);
@@ -60,53 +64,100 @@ const Products = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        {/* Category Selection */}
-        <div className="flex items-center space-x-4 mb-4">
-          {categories.map((category) => (
-            <button
-              key={category.value}
-              onClick={() => dispatch(setSelectedCategory(category.value))}
-              className={`px-4 py-1 rounded-md ${
-                selectedCategory === category.value
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-600"
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
-
-        {/* View Mode Switch */}
-        <div className="flex items-center justify-between space-x-2 mb-4">
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => dispatch(setViewMode("grid"))}
-              className={`p-2 ${
-                viewMode === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
-              }`}
-            >
-              <span className="material-icons">grid_view</span>
-            </button>
-            <button
-              onClick={() => dispatch(setViewMode("list"))}
-              className={`p-2 ${
-                viewMode === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
-              }`}
-            >
-              <span className="material-icons">view_list</span>
-            </button>
+      <div className="grid grid-rows-2 py-1">
+        <div className="flex justify-between">
+          {/* Category Selection */}
+          <div className="flex items-center space-x-4 mb-4">
+            {categories.map((category) => (
+              <button
+                key={category.value}
+                onClick={() => dispatch(setSelectedCategory(category.name))}
+                className={`px-4 py-1 rounded-md ${
+                  selectedCategory === category.name
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
           </div>
-          <CrudButton
-            className=""
-            type={"create"}
-            text={"Tạo sản phẩm mới"}
-            onClick={handleCreateProduct}
-          />
+
+          {/* View Mode Switch */}
+          <div className="flex items-center justify-between space-x-2 mb-4">
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => dispatch(setViewMode("grid"))}
+                className={`p-2 rounded-md ${
+                  viewMode === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
+                }`}
+              >
+                <IoGridOutline />
+              </button>
+              <button
+                onClick={() => dispatch(setViewMode("list"))}
+                className={`p-2 rounded-md ${
+                  viewMode === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
+                }`}
+              >
+                <FaList />
+              </button>
+            </div>
+            <CrudButton
+              className=""
+              type={"create"}
+              text={"Tạo sản phẩm mới"}
+              onClick={handleCreateProduct}
+            />
+          </div>
+        </div>
+        <div className="mb-1">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <button
+                onClick={() => {
+                  if (selectedProducts.length === filteredProducts.length) {
+                    filteredProducts.forEach((product) =>
+                      dispatch(deselectProduct(product.id))
+                    );
+                  } else {
+                    filteredProducts.forEach((product) =>
+                      dispatch(selectProduct(product.id))
+                    );
+                  }
+                }}
+                className="px-4 py-1 rounded-md bg-blue-500 text-white flex items-center"
+              >
+                <input
+                  type="checkbox"
+                  className="mr-2 w-5 h-5"
+                  checked={selectedProducts.length !== 0 && selectedProducts.length === filteredProducts.length}
+                  onChange={() => {}}
+                />
+                {selectedProducts.length !== 0 && selectedProducts.length === filteredProducts.length
+                  ? "Bỏ chọn tất cả"
+                  : "Chọn tất cả"}
+              </button>
+            </div>
+            {selectedProducts.length > 0 && (
+              <div>
+                <button
+                  onClick={() => {
+                    selectedProducts.forEach((productId) =>
+                      dispatch(deleteProduct(productId))
+                    );
+                  }}
+                  className="px-2 py-1 flex items-center rounded-md bg-red-500 text-white"
+                >
+                  <RiDeleteBin6Line className="mr-2 inline-block" />
+                  Xóa ({selectedProducts.length})
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
+      <hr className="mb-2" />
       {/* Product Display */}
       <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
         {filteredProducts.map((product) =>

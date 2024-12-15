@@ -1,19 +1,38 @@
+import useBreadcrumbs from "use-react-router-breadcrumbs";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Paths, getVietnamesePath } from "../constants/paths"; // Adjust the import according to your project structure
+import { getVietnamesePath } from "../constants/paths"; // Adjust the import according to your project structure
 
-const Breadcrumb = () => {
+const breadcrumbPatterns = [
+  { pattern: /^\/$/, name: "Dashboard" },
+  { pattern: /^\/product$/, name: "Sản phẩm" },
+  { pattern: /^\/product\/\d+$/, name: "Chi tiết sản phẩm" },
+  { pattern: /^\/invoice$/, name: "Hóa đơn" },
+  { pattern: /^\/invoice\/\d+$/, name: "Chi tiết hóa đơn" },
+  { pattern: /^\/employee$/, name: "Nhân viên" },
+  { pattern: /^\/employee\/\d+$/, name: "Chi tiết nhân viên" },
+  { pattern: /^\/report$/, name: "Báo cáo" },
+  { pattern: /^\/prescription$/, name: "Đơn thuốc" },
+  { pattern: /^\/account$/, name: "Tài khoản" },
+  { pattern: /^\/setting$/, name: "Cài đặt" },
+];
+
+const getBreadcrumbName = (pathname) => {
+  for (const { pattern, name } of breadcrumbPatterns) {
+    if (pattern.test(pathname)) {
+      return name;
+    }
+  }
+  return getVietnamesePath(pathname);
+};
+
+const Breadcrumb = ( {title} ) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
-  console.log(location);
-  const getBreadcrumbName = (pathname) => {
-    return getVietnamesePath(pathname);
-  };
-
   return (
     <nav className="breadcrumb text-white">
       <h2 className="text-xl font-bold">
-        {getBreadcrumbName(pathnames[pathnames.length - 1] || "Dashboard")}
+        {getBreadcrumbName(location.pathname || "Dashboard")}
       </h2>
       <div className="text-sm">
         <Link to="/">VitalCare</Link>
@@ -22,7 +41,7 @@ const Breadcrumb = () => {
           return (
             <span key={to}>
               {" > "}
-              <Link to={to} class="capitalize">
+              <Link to={to}>
                 {getBreadcrumbName(value)}
               </Link>
             </span>
