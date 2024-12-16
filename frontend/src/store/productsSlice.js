@@ -31,7 +31,7 @@ const initialState = {
   products: [],
   page: 1,
   viewMode: "list",
-  selectedCategory: "all",
+  selectedCategory: "Tất cả",
   selectedProducts: [],
   loading: false,
   error: null,
@@ -49,6 +49,11 @@ const productsSlice = createSlice({
     },
     selectProduct: (state, action) => {
       state.selectedProducts.push(action.payload);
+    },
+    deleteProduct: (state, action) => {
+      state.products = state.products.filter(
+        (product) => product.id !== action.payload,
+      );
     },
     deselectProduct: (state, action) => {
       state.selectedProducts = state.selectedProducts.filter(
@@ -95,5 +100,6 @@ export const {
   setSelectedCategory,
   selectProduct,
   deselectProduct,
+  deleteProduct,
 } = productsSlice.actions;
 export default productsSlice.reducer;

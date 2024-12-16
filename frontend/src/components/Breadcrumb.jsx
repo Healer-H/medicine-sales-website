@@ -1,4 +1,3 @@
-import useBreadcrumbs from "use-react-router-breadcrumbs";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getVietnamesePath } from "../constants/paths"; // Adjust the import according to your project structure
