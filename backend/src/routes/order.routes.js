@@ -463,6 +463,7 @@ Router.patch(Path.Order.UpdateOrder, orderControllers.updateOrder)
 Router.post(Path.Order.AddProductToOrder, orderControllers.addProductToOrder)
 Router.post(Path.Order.CreateOrder, orderControllers.createOrder)
 Router.get(Path.Order.GetAllOrders, orderControllers.getAllOrders)
+Router.get(Path.Order.GetOrder, orderControllers.getOrder)
 Router.delete(
   Path.Order.DeleteMultipleOrders,
   authorization,

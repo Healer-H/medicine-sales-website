@@ -27,6 +27,7 @@ const apiRoutes = {
     CreateOrder: "/orders/create-order",
     ExportOrder: "/orders/export-order/:id",
     UpdateOrder: "/orders/:id",
+    GetOrder: "/orders/:id",
     GetAllOrders: "/orders/",
     DeleteOrder: "/orders/:id",
     DeleteMultipleOrders: "/orders/delete-multiple-orders",

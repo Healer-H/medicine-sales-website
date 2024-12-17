@@ -1,25 +1,34 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchInvoices } from '../store/invoiceSlice';
+import Spinner from "../components/Spinner";
+
+
 
 const InvoiceDetail = () => {
   const { id } = useParams();
-  const invoice = useSelector(state =>
-    state.invoices.invoices.find(inv => inv.id === parseInt(id))
+  const dispatch = useDispatch();
+  const { invoices, loading } = useSelector((state) => state.invoices);
+
+  useEffect(() => {
+    if (invoices.length === 0) {
+      dispatch(fetchInvoices());
+    }
+  }, [dispatch, invoices.length]);
+
+  const invoice = useSelector((state) =>
+    state.invoices.invoices.find((inv) => inv.id === parseInt(id))
   );
-
+  if (loading) {  
+    return <Spinner size="md" color="blue-500" /> 
+  }  
   if (!invoice) {
-    return <div>Invoice not found</div>;
+    console.log(invoice);
+    return <div>Không tìm thấy hóa đơn.</div>;
   }
-
-  // Sample product data for display
-  const sampleProducts = [
-    { name: "Vitamin B6 (pyridoxine HCl)", description: "Bổ sung vitamin", unitPrice: "10.000", quantity: 4, totalPrice: "40.000" },
-    { name: "Vitamin C 500mg", description: "Hỗ trợ miễn dịch", unitPrice: "15.000", quantity: 3, totalPrice: "45.000" },
-    { name: "Omega 3", description: "Tăng cường sức khỏe", unitPrice: "20.000", quantity: 2, totalPrice: "40.000" },
-    { name: "Vitamin D3 1000IU", description: "Hỗ trợ xương", unitPrice: "12.000", quantity: 5, totalPrice: "60.000" }
-  ];
-
+  console.log(invoice);
+  const products = invoice.OrderDetails;
   return (
     <div className="bg-gray-50 min-h-screen p-6">
       {/* Page Container */}
@@ -27,12 +36,14 @@ const InvoiceDetail = () => {
         {/* Invoice Header */}
         <div className="grid grid-cols-2 mb-6 text-gray-700">
           <div>
-            <p className="font-semibold text-lg">Nhà thuốc: ABCDEFGH</p>
-            <p>Địa chỉ: Khu 5 TT. Thanh Thủy, H. Thanh Thủy</p>
-            <p>SDT: 0651520565</p>
+            <p className="font-semibold text-lg">Nhà thuốc VitalCare</p>
+            <p>Địa chỉ: Khu phố 6, Phường Linh Trung, TP. Thủ Đức, Thành phố Hồ Chí Minh,</p>
+            <p>SĐT: 0651520565</p>
           </div>
           <div className="text-right">
-            <p className="font-semibold text-lg">Mã hóa đơn: {invoice.invoiceid || "123"}</p>
+            <p className="font-semibold text-lg">
+              Mã hóa đơn: {invoice.id}
+            </p>
           </div>
         </div>
 
@@ -40,48 +51,44 @@ const InvoiceDetail = () => {
         <h2 className="text-center text-3xl font-bold mb-6">HÓA ĐƠN</h2>
 
         {/* Invoice Details */}
-        <div className="mb-6 text-gray-700 grid grid-cols-2 gap-4">
+        <div className="mb-6 text-gray-700 flex justify-between">
           <div>
-            <p>Khách hàng: Ngô Thị Lễ Hội</p>
-            <p>SDT Khách hàng: 0390966531</p>
-          </div>
-          <div>
-            <p>Người lập: Vũ Minh Hiếu</p>
-            <p>Ngày lập: 10/10/2024</p>
-            <p>Phương thức thanh toán: ZaloPay</p>
+            <p>Người tạo: {invoice.employee.name}</p>
+            <p>Thời gian tạo: {invoice.createdAt}</p>
+            <p>Phương thức thanh toán: {invoice.paymentMethod}</p>
           </div>
         </div>
 
-        {/* Product Table */}
-        <table className="w-full border-collapse mb-6">
-          <thead>
-            <tr className="bg-blue-500 text-white text-left">
-              <th className="p-2">Sản phẩm</th>
-              <th className="p-2">Mô tả</th>
-              <th className="p-2">Đơn giá</th>
-              <th className="p-2">Số lượng</th>
-              <th className="p-2">Thành tiền</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sampleProducts.map((product, index) => (
-              <tr key={index} className="border-b">
-                <td className="p-2">{product.name}</td>
-                <td className="p-2">{product.description}</td>
-                <td className="p-2">{product.unitPrice}đ</td>
-                <td className="p-2">{product.quantity}</td>
-                <td className="p-2">{product.totalPrice}đ</td>
+        {/* /* Product Table */}
+          <table className="w-full border-collapse mb-6">
+            <thead>
+              <tr className="bg-blue-500 text-white text-left">
+                <th className="p-2 text-center">Sản phẩm</th>
+                <th className="p-2 text-center">Mô tả</th>
+                <th className="p-2 text-center">Đơn giá</th>
+                <th className="p-2 text-center">Số lượng</th>
+                <th className="p-2 text-center">Thành tiền</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {products.map((product, index) => (
+                <tr key={index} className="border-b">
+            <td className="p-2 text-center">{product.name}</td>
+            <td className="p-2 text-center">{product.description}</td>
+            <td className="p-2 text-center">{product.unitPrice}đ</td>
+            <td className="p-2 text-center">{product.quantity}</td>
+            <td className="p-2 text-center">{product.price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-4">
+            <p className="text-right font-bold">
+              Tổng tiền: {invoice.totalAmount}
+            </p>
+          </div>
 
-        {/* Total Amount */}
-        <div className="text-right font-bold text-lg mb-4">
-          Tổng tiền: 160.000đ
-        </div>
-
-        {/* Confirm Button */}
+          {/* Confirm Button */}
         <div className="text-right">
           <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600">
             Xác nhận

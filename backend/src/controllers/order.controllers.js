@@ -14,6 +14,21 @@ class OrderController {
       next(error)
     }
   }
+  // [GET] orders/:id
+  async getOrder(req, res, next) {
+    try {
+      const orderId = req.params.id
+      const response = await orderServices.getOrder(orderId)
+      if (!response.success) {
+        return res
+          .status(HttpStatusCodes.NOT_FOUND)
+          .json({ message: response.message })
+      }
+      res.status(HttpStatusCodes.OK).json({ order: response.order })
+    } catch (error) {
+      next(error)
+    }
+  }
   // [PUT] orders/:id
   async updateOrder(req, res, next) {
     try {

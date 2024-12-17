@@ -38,6 +38,7 @@ const Path = {
   },
   Order: {
     Base: '/orders',
+    GetOrder: '/:id',
     AddProductToOrder: '/add-product-to-order',
     CreateOrder: '/create-order',
     ExportOrder: '/export-order/:id',

@@ -5,7 +5,6 @@ import ProductRow from "../components/ProductRow";
 import LoadMoreButton from "../components/LoadMoreButton";
 import CrudButton from "../components/CrudButton";
 import Spinner from "../components/Spinner";
-import Subheader from "../components/SubHeader";
 import { IoGridOutline } from "react-icons/io5";
 import { FaList } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -36,7 +35,6 @@ const Products = () => {
     dispatch(fetchInitialProducts());
   }, [dispatch]);
   const handleCreateProduct = () => {
-    // Redirect to the create product page
     navigate("/create-product");
   }
 
@@ -52,10 +50,10 @@ const Products = () => {
     selectedCategory === "Tất cả"
       ? products
       : products.filter((product) => product.category === selectedCategory);
-  console.log(filteredProducts);
+  // console.log(filteredProducts);
   // Hiển thị trạng thái  
   if (loading) {  
-    return <Spinner size="md" color="green-500" /> 
+    return <Spinner size="md" color="blue-500" /> 
   }  
 
   if (!loading && error) {  
@@ -84,7 +82,7 @@ const Products = () => {
           </div>
 
           {/* View Mode Switch */}
-          <div className="flex items-center justify-between space-x-2 mb-4">
+          <divk className="flex items-center justify-between space-x-2 mb-4">
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => dispatch(setViewMode("grid"))}
@@ -109,7 +107,7 @@ const Products = () => {
               text={"Tạo sản phẩm mới"}
               onClick={handleCreateProduct}
             />
-          </div>
+          </divk>
         </div>
         <div className="mb-1">
           <div className="flex justify-between items-center mb-4">
