@@ -2,12 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { formatPrice } from '../../utils/formatData';
 
 const ProductCard = ({ product, onSelect, isSelected }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/product/${product.product_id}`);
+    navigate(`/product/${product.name}`);
   };
 
   return (
@@ -19,20 +20,20 @@ const ProductCard = ({ product, onSelect, isSelected }) => {
         onChange={() => onSelect(product.product_id)}
       />
       <div onClick={handleCardClick} className="cursor-pointer w-full flex flex-col items-center">
-        <img src={product.image} alt={product.name} className="w-40 h-40 mb-4" />
+        <img src={product.imageUrl} alt={product.name} className="w-40 h-40 mb-4" />
         <h3 className="text-sm font-bold text-center">{product.name}</h3>
         <p className="text-gray-500 text-xs text-center">{product.category}</p>
-        <p className="text-red-600 font-bold text-xl">{product.price}</p>
+        <p className="text-red-600 font-bold text-xl">{formatPrice(product.price)}</p>
         <button
           className={`mt-2 font-bold rounded-md ${
-            product.status === 'In Stock'
+            product.status === 'in_stock'
               ? 'text-green-500'
-              : product.status === 'Out of Stock'
+              : product.status === 'out_of_stock'
               ? 'text-red-500'
               : 'text-gray-500'
           }`}
         >
-          {product.status === 'In Stock' ? 'Còn hàng' : 'Hết hàng'}
+          {product.status === 'in_stock' ? 'Còn hàng' : 'Hết hàng'}
         </button>
       </div>
     </div>

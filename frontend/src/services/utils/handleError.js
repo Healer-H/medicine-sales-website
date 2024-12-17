@@ -3,10 +3,11 @@ const handleError = (error) => {
   if (error.response) {
     // Lỗi từ server trả về
     const { status, data } = error.response;
+    console.log(error.response);
     console.error(`Error ${status}: ${data.error}`);
-    return data.error || "Something went wrong!";
+    return data.error || data.message || "Lỗi logic ở frontend hoặc backend";
   }
-  return error.message || "Network Error!";
+  return "Server lỗi trong quá trình xử lý!";
 };
 
 export default handleError;

@@ -19,18 +19,6 @@ const Subheader = ({
         <Breadcrumb />
       </div>
 
-      <div className="flex items-center space-x-4">
-        <div className="flex-grow flex justify-center">
-          {showSearchBar && (
-            <input
-              type="text"
-              placeholder="Tìm kiếm..."
-              className="border rounded-lg py-2 px-4 text-sm w-64"
-              onChange={(e) => onSearch && onSearch(e.target.value)}
-            />
-          )}
-        </div>
-      </div>
 
       <div className='flex justify-between items-center space-x-3'>
         {/* Filter Button */}

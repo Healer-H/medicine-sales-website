@@ -107,9 +107,14 @@ const PRODUCTS_MESSAGES = {
     SUCCESS: 'Dữ liệu đã được xuất thành công.',
     NO_RESULTS: 'Không có dữ liệu để xuất.',
   },
+  SEARCH: {
+    SUCCESS: 'Danh sách sản phẩm tìm kiếm.',
+    NO_RESULTS: 'Không tìm thấy sản phẩm phù hợp.',
+  },
   TOP_SELLING: {
     SUCCESS: 'Danh sách sản phẩm bán chạy nhất.',
-    INVALID_DATE_FORMAT: 'Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng YYYY-MM-DD.',
+    INVALID_DATE_FORMAT:
+      'Định dạng ngày không hợp lệ. Vui lòng sử dụng định dạng YYYY-MM-DD.',
     INVALID_DATE_RANGE: 'Ngày kết thúc không được nhỏ hơn ngày bắt đầu.',
     DATE_RANGE_TOO_LARGE: 'Khoảng thời gian không được vượt quá 1 năm.',
     END_DATE_EXCEEDS_CURRENT: 'Ngày kết thúc không được lớn hơn ngày hiện tại.',

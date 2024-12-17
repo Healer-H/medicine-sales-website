@@ -1,6 +1,5 @@
 const ProductService = require('../services/product.service')
 const HttpStatusCodes = require('../constants/httpStatusCodes')
-const Messages = require('../constants/messages')
 
 // controllers/productController.js
 class ProductController {
@@ -30,7 +29,7 @@ class ProductController {
   async getAllProducts(req, res, next) {
     try {
       const page = parseInt(req.query.page) || 1
-      const limit = parseInt(req.query.limit) || 10
+      const limit = parseInt(req.query.limit) || 16
       const response = await ProductService.getAllProducts(page, limit)
       return res.status(HttpStatusCodes.OK).json(response.data)
     } catch (error) {
@@ -90,7 +89,7 @@ class ProductController {
     }
   }
 
-    // Import sản phẩm
+  // Import sản phẩm
   async importProducts(req, res, next) {
     try {
       const fileBuffer = req.file.buffer
@@ -134,18 +133,21 @@ class ProductController {
       next(error)
     }
   }
-  
+
   // Lấy danh sách sản phẩm bán chạy
   async getTopSellingProducts(req, res, next) {
     try {
       const { startDate, endDate } = req.query
-      const response = await ProductService.getTopSellingProducts(startDate, endDate)
+      const response = await ProductService.getTopSellingProducts(
+        startDate,
+        endDate,
+      )
       return res.status(HttpStatusCodes.OK).json(response)
     } catch (error) {
       next(error)
     }
   }
-  
+
   // Lấy danh sách sản phẩm hết hạn
   async getExpiredProducts(req, res, next) {
     try {

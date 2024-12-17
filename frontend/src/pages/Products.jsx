@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Paths } from "../constants/paths"
 import ProductCard from "../components/ProductCard";
 import ProductRow from "../components/ProductRow";
 import LoadMoreButton from "../components/LoadMoreButton";
 import CrudButton from "../components/CrudButton";
 import Spinner from "../components/Spinner";
+import SearchBar from "../components/SearchBar"; // Import SearchBar
 import { IoGridOutline } from "react-icons/io5";
 import { FaList } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -16,6 +18,7 @@ import {
   selectProduct,
   deselectProduct,
   deleteProduct,
+  searchProducts,
 } from "../store/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -30,13 +33,15 @@ const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { viewMode, products, selectedProducts, selectedCategory, loading, error } = useSelector((state) => state.products);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     dispatch(fetchInitialProducts());
   }, [dispatch]);
+
   const handleCreateProduct = () => {
-    navigate("/create-product");
-  }
+    navigate(Paths.CREATE_PRODUCT);
+  };
 
   const handleSelectProduct = (productId) => {
     if (selectedProducts.includes(productId)) {
@@ -46,25 +51,57 @@ const Products = () => {
     }
   };
 
-  const filteredProducts =
-    selectedCategory === "Tất cả"
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
-  // console.log(filteredProducts);
-  // Hiển thị trạng thái  
-  if (loading) {  
-    return <Spinner size="md" color="blue-500" /> 
-  }  
+  const handleSearch = (query) => {
+    setSearchQuery(searchQuery);
+    if (searchQuery === "") {
+      dispatch(fetchInitialProducts());
+      return;
+    }
 
-  if (!loading && error) {  
-    return <div>Error: {error}</div>;  
-  }  
+    const filteredProducts = products.filter((product) => {
+      const matchesCategory = selectedCategory === "Tất cả" || product.category === selectedCategory;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+
+    if (filteredProducts.length > 0) {
+      // Update the state with filtered products
+      dispatch(fetchInitialProducts.fulfilled({ products: filteredProducts }));
+    } else {
+      // Fetch products from API
+      dispatch(searchProducts(searchQuery)).unwrap().catch((error) => {
+        console.error("Failed to search products: ", error);
+      });
+    }
+  };
+
+  const handleDeleteProduct = (productId) => {
+    dispatch(deleteProduct(productId)).unwrap().catch((error) => {
+      console.error("Failed to delete product: ", error);
+    });
+  };
+
+  // Filter products based on selected category and search query
+  const filteredProducts = products.filter((product) => {
+    console.log(product)
+    const matchesCategory = 
+      selectedCategory === "Tất cả" || 
+      product.category === (
+        selectedCategory === "Dược phẩm" ? "duoc-pham" :
+        selectedCategory === "Thiết bị y tế" ? "thiet-bi-y-te" :
+        selectedCategory === "Chăm sóc cá nhân" ? "cham-soc" : ""
+      );
+    return matchesCategory;
+  });
+
+  if (loading) {
+    return <Spinner size="md" color="green-500" />;
+  }
 
   return (
     <div>
       <div className="grid grid-rows-2 py-1">
         <div className="flex justify-between">
-          {/* Category Selection */}
           <div className="flex items-center space-x-4 mb-4">
             {categories.map((category) => (
               <button
@@ -80,9 +117,7 @@ const Products = () => {
               </button>
             ))}
           </div>
-
-          {/* View Mode Switch */}
-          <divk className="flex items-center justify-between space-x-2 mb-4">
+          <div className="flex items-center justify-between space-x-2 mb-4">
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => dispatch(setViewMode("grid"))}
@@ -116,11 +151,11 @@ const Products = () => {
                 onClick={() => {
                   if (selectedProducts.length === filteredProducts.length) {
                     filteredProducts.forEach((product) =>
-                      dispatch(deselectProduct(product.id))
+                      dispatch(deselectProduct(product.product_id))
                     );
                   } else {
                     filteredProducts.forEach((product) =>
-                      dispatch(selectProduct(product.id))
+                      dispatch(selectProduct(product.product_id))
                     );
                   }
                 }}
@@ -142,7 +177,7 @@ const Products = () => {
                 <button
                   onClick={() => {
                     selectedProducts.forEach((productId) =>
-                      dispatch(deleteProduct(productId))
+                      handleDeleteProduct(productId)
                     );
                   }}
                   className="px-2 py-1 flex items-center rounded-md bg-red-500 text-white"
@@ -155,36 +190,43 @@ const Products = () => {
           </div>
         </div>
       </div>
-      <hr className="mb-2" />
-      {/* Product Display */}
-      <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
-        {filteredProducts.map((product) =>
-          viewMode === "grid" ? (
-            <ProductCard
-              key={product.product_id}
-              product={product}
-              isSelected={selectedProducts.includes(product.product_id)}
-              onSelect={handleSelectProduct}
-            />
-          ) : (
-            <ProductRow
-              key={product.product_id}
-              product={product}
-              isSelected={selectedProducts.includes(product.product_id)}
-              onSelect={handleSelectProduct}
-            />
-          )
-        )}
-      </div>
 
-      {filteredProducts.length === 0 && (
-        <div className="text-center text-gray-500">Không có sản phẩm nào</div>
+      <SearchBar onSearch={handleSearch} />
+      {!loading && error && (
+        <div className="text-red-500 text-center">{error}</div>
       )}
-      {filteredProducts.length > 0 && (
-        <LoadMoreButton
-          text={"Xem thêm"}
-          onClick={() => dispatch(loadMoreData())}
-        />
+      {!loading && !error && (
+        <>
+          <hr className="mb-2" />
+          <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
+            {filteredProducts.map((product) =>
+              viewMode === "grid" ? (
+                <ProductCard
+                  key={product.product_id}
+                  product={product}
+                  isSelected={selectedProducts.includes(product.product_id)}
+                  onSelect={handleSelectProduct}
+                />
+              ) : (
+                <ProductRow
+                  key={product.product_id}
+                  product={product}
+                  isSelected={selectedProducts.includes(product.product_id)}
+                  onSelect={handleSelectProduct}
+                />
+              )
+            )}
+          </div>
+          {filteredProducts.length === 0 && (
+            <div className="text-center text-gray-500">Không có sản phẩm nào</div>
+          )}
+          {filteredProducts.length > 0 && (
+            <LoadMoreButton
+              text={"Xem thêm"}
+              onClick={() => dispatch(loadMoreData())}
+            />
+          )}
+        </>
       )}
     </div>
   );

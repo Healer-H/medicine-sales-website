@@ -10,6 +10,7 @@ const apiRoutes = {
     Add: "/products/add",
     All: "/products/all",
     Update: "/products/:id",
+    Delete: "/products/:id",
     Search: "/products/search",
     GetExpired: "/products/get-expired",
     GetLowStock: "/products/get-low-stock",

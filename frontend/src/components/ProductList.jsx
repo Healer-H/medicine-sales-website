@@ -6,6 +6,7 @@ import { loadMoreData } from '../store/productsSlice';
 import LoadMoreButton from '../components/LoadMoreButton';
 
 const ProductList = ({ title, products, onSelect }) => {
+  console.log(products)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
