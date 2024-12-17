@@ -4,26 +4,58 @@ import { useParams } from 'react-router-dom';
 
 const InvoiceDetail = () => {
   const { id } = useParams();
-  const invoice = useSelector(state => state.invoices.invoices.find(inv => inv.id === parseInt(id)));
+  const invoice = useSelector(state =>
+    state.invoices.invoices.find(inv => inv.id === parseInt(id))
+  );
 
   if (!invoice) {
     return <div>Invoice not found</div>;
   }
 
+  // Sample product data for display
+  const sampleProducts = [
+    { name: "Vitamin B6 (pyridoxine HCl)", description: "Bổ sung vitamin", unitPrice: "10.000", quantity: 4, totalPrice: "40.000" },
+    { name: "Vitamin C 500mg", description: "Hỗ trợ miễn dịch", unitPrice: "15.000", quantity: 3, totalPrice: "45.000" },
+    { name: "Omega 3", description: "Tăng cường sức khỏe", unitPrice: "20.000", quantity: 2, totalPrice: "40.000" },
+    { name: "Vitamin D3 1000IU", description: "Hỗ trợ xương", unitPrice: "12.000", quantity: 5, totalPrice: "60.000" }
+  ];
+
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-4">Chi Tiết Hóa Đơn</h1>
-      <div className="bg-white p-4 shadow-md rounded-md">
-        <div className="mb-4">
-          <h2 className="text-lg font-bold">Hóa Đơn</h2>
-          <p>Mã hóa đơn: {invoice.id}</p>
-          <p>Phương thức thanh toán: {invoice.paymentMethod}</p>
-          <p>Tổng tiền: {invoice.total}</p>
-          <p>Ngày lập: {invoice.createdDate}</p>
+    <div className="bg-gray-50 min-h-screen p-6">
+      {/* Page Container */}
+      <div className="max-w-6xl mx-auto bg-white p-6 shadow-md rounded-md">
+        {/* Invoice Header */}
+        <div className="grid grid-cols-2 mb-6 text-gray-700">
+          <div>
+            <p className="font-semibold text-lg">Nhà thuốc: ABCDEFGH</p>
+            <p>Địa chỉ: Khu 5 TT. Thanh Thủy, H. Thanh Thủy</p>
+            <p>SDT: 0651520565</p>
+          </div>
+          <div className="text-right">
+            <p className="font-semibold text-lg">Mã hóa đơn: {invoice.invoiceid || "123"}</p>
+          </div>
         </div>
-        <table className="w-full bg-white shadow-md rounded-md">
+
+        {/* Centered Invoice Title */}
+        <h2 className="text-center text-3xl font-bold mb-6">HÓA ĐƠN</h2>
+
+        {/* Invoice Details */}
+        <div className="mb-6 text-gray-700 grid grid-cols-2 gap-4">
+          <div>
+            <p>Khách hàng: Ngô Thị Lễ Hội</p>
+            <p>SDT Khách hàng: 0390966531</p>
+          </div>
+          <div>
+            <p>Người lập: Vũ Minh Hiếu</p>
+            <p>Ngày lập: 10/10/2024</p>
+            <p>Phương thức thanh toán: ZaloPay</p>
+          </div>
+        </div>
+
+        {/* Product Table */}
+        <table className="w-full border-collapse mb-6">
           <thead>
-            <tr className="bg-blue-500 text-white">
+            <tr className="bg-blue-500 text-white text-left">
               <th className="p-2">Sản phẩm</th>
               <th className="p-2">Mô tả</th>
               <th className="p-2">Đơn giá</th>
@@ -32,26 +64,27 @@ const InvoiceDetail = () => {
             </tr>
           </thead>
           <tbody>
-            {invoice.products?.map((product, index) => (
+            {sampleProducts.map((product, index) => (
               <tr key={index} className="border-b">
                 <td className="p-2">{product.name}</td>
                 <td className="p-2">{product.description}</td>
-                <td className="p-2">{product.unitPrice}</td>
+                <td className="p-2">{product.unitPrice}đ</td>
                 <td className="p-2">{product.quantity}</td>
-                <td className="p-2">{product.totalPrice}</td>
+                <td className="p-2">{product.totalPrice}đ</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="mt-4">
-          <p className="text-right font-bold">Tổng tiền: {invoice.total}</p>
+
+        {/* Total Amount */}
+        <div className="text-right font-bold text-lg mb-4">
+          Tổng tiền: 160.000đ
         </div>
-        <div className="flex space-x-4 mt-4">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-            Xuất hóa đơn
-          </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-md">
-            Lưu
+
+        {/* Confirm Button */}
+        <div className="text-right">
+          <button className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600">
+            Xác nhận
           </button>
         </div>
       </div>
