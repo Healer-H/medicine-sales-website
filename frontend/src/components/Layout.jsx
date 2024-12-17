@@ -91,7 +91,7 @@ const Layout = ({ children }) => {
         {/* Page content */}
         <div className="p-4 bg-white">
           <Subheader
-            showSearchBar={showSearchBar}
+            
             showFilter={showFilter}
             showSorter={showSorter}
           />

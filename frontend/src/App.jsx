@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
+import CreateProduct from "./pages/CreateProduct";
 import ProductDetail from "./components/ProductDetail";
 import InvoiceManagement from "./pages/Invoice";
 import Layout from "./components/Layout";
@@ -43,6 +44,8 @@ const App = () => {
                     <Route
                     path={Paths.PRODUCT_DETAIL}
                     element={<ProductDetail />}
+                    />
+                    <Route path={Paths.CREATE_PRODUCT} element={<CreateProduct />}
                   />
                   <Route path={Paths.INVOICES} element={<InvoiceManagement />} />
                     <Route path={Paths.INVOICE_DETAIL} element={<InvoiceDetail />} />

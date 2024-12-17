@@ -4,11 +4,9 @@ const SearchBar = ({ onSearch }) => {
     const [query, setQuery] = useState('');
 
     const handleInputChange = (e) => {
-        setQuery(e.target.value);
-    };
-
-    const handleSearch = () => {
-        onSearch(query);
+        const newQuery = e.target.value;
+        setQuery(newQuery);
+        onSearch(newQuery); // Call onSearch immediately
     };
 
     return (
@@ -17,9 +15,9 @@ const SearchBar = ({ onSearch }) => {
                 type="text"
                 value={query}
                 onChange={handleInputChange}
-                placeholder="Search..."
+                placeholder="Tìm kiếm..."
+                className="border rounded-lg py-2 px-4 text-sm w-64"
             />
-            <button onClick={handleSearch}>Tìm kiếm...</button>
         </div>
     );
 };

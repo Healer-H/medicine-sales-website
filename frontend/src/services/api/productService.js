@@ -9,8 +9,9 @@ const productService = {
   add: (productData) => axiosClient.post(apiRoutes.Product.Add, productData),
   update: (id, productData) =>
     axiosClient.put(apiRoutes.Product.Update.replace(":id", id), productData),
-  search: (query) =>
-    axiosClient.get(apiRoutes.Product.Search, { params: query }),
+  delete: (id) =>
+    axiosClient.delete(apiRoutes.Product.Delete.replace(":id", id)),
+  search: (q) => axiosClient.get(apiRoutes.Product.Search, { params: q }),
   getExpired: () => axiosClient.get(apiRoutes.Product.GetExpired),
   getLowStock: () => axiosClient.get(apiRoutes.Product.GetLowStock),
 };

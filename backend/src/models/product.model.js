@@ -40,6 +40,26 @@ Product.init(
       allowNull: true,
       defaultValue: 0,
     },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'in_stock',
+      validate: {
+        isIn: [['in_stock', 'out_of_stock', 'coming_soon']],
+      },
+    },
+    productUnit: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,

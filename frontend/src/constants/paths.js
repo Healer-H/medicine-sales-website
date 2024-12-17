@@ -2,6 +2,7 @@ const Paths = {
   LOGIN: "/login",
   DASHBOARD: "/",
   PRODUCTS: "/product",
+  CREATE_PRODUCT: "/product/create",
   PRODUCT_DETAIL: "/product/:id",
   INVOICES: "/invoice",
   INVOICE_DETAIL: "/invoice/:id",
@@ -14,23 +15,23 @@ const Paths = {
 };
 
 const PathTranslations = {
-  "login": "Đăng nhập",
+  login: "Đăng nhập",
   "": "Dashboard",
-  "product": "Sản phẩm",
+  product: "Sản phẩm",
+  "product/create": "Tạo sản phẩm",
   "product/:id": "Chi tiết sản phẩm",
-  "invoice": "Hóa đơn",
+  invoice: "Hóa đơn",
   "invoice/:id": "Chi tiết hóa đơn",
-  "employee": "Nhân viên",
+  employee: "Nhân viên",
   "employee/:id": "Chi tiết nhân viên",
-  "report": "Báo cáo",
-  "prescription": "Đơn thuốc",
-  "account": "Tài khoản",
-  "setting": "Cài đặt",
+  report: "Báo cáo",
+  prescription: "Đơn thuốc",
+  account: "Tài khoản",
+  setting: "Cài đặt",
 };
 
 function getVietnamesePath(path) {
   return PathTranslations[path] || path;
 }
-
 
 export { Paths, getVietnamesePath };

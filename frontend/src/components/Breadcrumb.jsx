@@ -5,7 +5,8 @@ import { getVietnamesePath } from "../constants/paths"; // Adjust the import acc
 const breadcrumbPatterns = [
   { pattern: /^\/$/, name: "Dashboard" },
   { pattern: /^\/product$/, name: "Sản phẩm" },
-  { pattern: /^\/product\/\d+$/, name: "Chi tiết sản phẩm" },
+  { pattern: /^\/product\/create$/, name: "Tạo sản phẩm" },
+  { pattern: /^\/product\/\$/, name: "Chi tiết sản phẩm" },
   { pattern: /^\/invoice$/, name: "Hóa đơn" },
   { pattern: /^\/invoice\/\d+$/, name: "Chi tiết hóa đơn" },
   { pattern: /^\/invoice\/\d+\/edit$/, name: "Sửa hóa đơn" },
@@ -30,7 +31,7 @@ const Breadcrumb = ( {title} ) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   return (
-    <nav className="breadcrumb text-white">
+    <nav className="breadcrumb text-white"> 
       <h2 className="text-xl font-bold">
         {getBreadcrumbName(location.pathname || "Dashboard")}
       </h2>
