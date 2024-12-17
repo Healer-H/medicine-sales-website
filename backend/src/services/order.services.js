@@ -1,5 +1,5 @@
 // services/OrderServices.js
-const { Product, Order, OrderDetail } = require('../models/index.models')
+const { Product, Order, OrderDetail, User } = require('../models/index.models')
 const Messages = require('../constants/messages')
 const renderPDF = require('../utils/pdfRenderer')
 
@@ -176,20 +176,85 @@ class OrderServices {
     }
   }
 
+  // async getAllOrders() {
+  //   try {
+  //     const orders = await Order.findAll({
+  //       include: {
+  //         model: OrderDetail,
+  //         include: Product,
+  //       },
+  //     })
+  //     return {
+  //       message: Messages.ORDERS_MESSAGES.GET.SUCCESS,
+  //       orders,
+  //     }
+  //   } catch (error) {
+  //     throw new Error(`Get all orders service error: ${error}`)
+  //   }
+  // }
   async getAllOrders() {
     try {
       const orders = await Order.findAll({
-        include: {
-          model: OrderDetail,
-          include: Product,
-        },
-      })
+        include: [
+          {
+            model: OrderDetail,
+            include: Product,
+          },
+          {
+            model: User,
+            as: 'employee',
+            attributes: ['id', 'name'],
+          }
+        ],
+      });
       return {
         message: Messages.ORDERS_MESSAGES.GET.SUCCESS,
         orders,
+      };
+    } catch (error) {
+      throw new Error(`Get all orders service error: ${error}`);
+    }
+  }
+
+  async getOrder(orderId) {
+    try {
+      const order = await Order.findOne({
+        where: { id: orderId },
+        include: {
+          model: OrderDetail,
+          include: {
+            model: Product,
+            attributes: ['name', 'description', 'price'],
+          },
+        },
+      })
+      if (!order) {
+        return {
+          success: false,
+          message: Messages.ORDERS_MESSAGES.GET.NOT_FOUND,
+        }
+      }
+      const orderDetails = order.OrderDetails.map(orderDetail => ({
+        name: orderDetail.Product.name,
+        description: orderDetail.Product.description,
+        unitPrice: orderDetail.Product.price,
+        quantity: orderDetail.quantity,
+        totalPrice: orderDetail.totalPrice,
+      }))
+      return {
+        success: true,
+        message: Messages.ORDERS_MESSAGES.GET.SUCCESS,
+        order: {
+          id: order.id,
+          employeeId: order.employeeId,
+          createdAt: order.createdAt,
+          totalAmount: order.totalAmount,
+          paymentMethod: order.paymentMethod,
+          orderDetails,
+        },
       }
     } catch (error) {
-      throw new Error(`Get all orders service error: ${error}`)
+      throw new Error(`Get order service error: ${error}`)
     }
   }
 
@@ -215,7 +280,6 @@ class OrderServices {
 
   async deleteMultipleOrders(orderIds) {
     try {
-      console.log(orderIds)
       await OrderDetail.destroy({ where: { id: orderIds } })
       await Order.destroy({ where: { id: orderIds } })
       return {

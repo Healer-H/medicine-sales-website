@@ -18,10 +18,12 @@ import InvoiceDetail from "./components/InvoiceDetail";
 import EmployeeDetailTabs from "./components/EmployeeDetailTabs";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import { ConfirmationDialogProvider } from "./providers/ConfirmationDialogProvider";
 
 const App = () => {
   return (
-    <Provider store={store}>
+    <ConfirmationDialogProvider>
+      <Provider store={store}>
       <Router
         future={{
           v7_startTransition: true,
@@ -58,6 +60,7 @@ const App = () => {
         </Routes>
       </Router>
     </Provider>
+    </ConfirmationDialogProvider>
   );
 };
 

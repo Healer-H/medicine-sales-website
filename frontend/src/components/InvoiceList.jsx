@@ -1,38 +1,69 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import LoadMoreButton from './LoadMoreButton';
-import { loadMoreData } from '../store/invoiceSlice';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import LoadMoreButton from "./LoadMoreButton";
+import {
+  loadMoreData,
+  selectInvoice,
+  selectAllInvoices,
+  deselectInvoice,
+  deselectAllInvoices,
+} from "../store/invoiceSlice";
+import { useDispatch } from "react-redux";
 
-
-const InvoiceList = ({ invoices, onEdit, onDelete }) => {
+const InvoiceList = ({ invoices, onView, onDelete }) => {
   const dispatch = useDispatch();
   return (
     <div>
       <table className="w-full bg-white shadow-md rounded-md">
         <thead>
           <tr className="bg-blue-500 text-white">
-            <th className="p-2">ID Hóa Đơn</th>
-            <th className="p-2">Phương Thức Thanh Toán</th>
-            <th className="p-2">Tổng Tiền</th>
-            <th className="p-2">Ngày Tạo</th>
-            <th className="p-2">Thao Tác</th>
+            <th className="p-2">
+              <input
+                type="checkbox"
+                className="w-5 h-5"
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    dispatch(selectAllInvoices());
+                  } else {
+                    dispatch(deselectAllInvoices());
+                  }
+                }}
+              />
+            </th>
+            <th className="text-center">ID</th>
+            <th className="p-2">Phương thức thanh toán</th>
+            <th className="p-2">Tổng tiền</th>
+            <th className="p-2">Thời gian tạo</th>
+            <th className="p-2">Thao tác</th>
           </tr>
         </thead>
         <tbody>
           {invoices.map((invoice) => (
-            <tr key={invoice.id} className="border-b">
-              <td className="p-2">{invoice.id}</td>
-              <td className="p-2">{invoice.paymentMethod}</td>
-              <td className="p-2">{invoice.total}</td>
-              <td className="p-2">{invoice.createdDate}</td>
-              <td className="p-2 space-x-2">
-                <button
-                  onClick={() => onEdit(invoice.id)}
-                  className="bg-blue-500 text-white px-4 py-1 rounded-md"
-                >
-                  Sửa
-                </button>
+            <tr
+              key={invoice.id}
+              className="border-b hover:bg-gray-100 onClick"
+              onClick={() => onView(invoice.id)}
+            >
+              <td className="p-2 text-center">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5"
+                  checked={invoice.isSelected}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      dispatch(selectInvoice(invoice.id));
+                    } else {
+                      dispatch(deselectInvoice(invoice.id));
+                    }
+                  }}
+                />
+              </td>
+              <td className="text-center">{invoice.id}</td>
+              <td className="p-2 text-center">
+                {invoice.paymentMethod || "Không xác định"}
+              </td>
+              <td className="p-2 text-center">{invoice.totalAmount}</td>
+              <td className="p-2 text-center">{invoice.createdAt}</td>
+              <td className="p-2 text-center space-x-2">
                 <button
                   onClick={() => onDelete(invoice.id)}
                   className="bg-red-500 text-white px-4 py-1 rounded-md"
@@ -44,14 +75,12 @@ const InvoiceList = ({ invoices, onEdit, onDelete }) => {
           ))}
         </tbody>
       </table>
-      <LoadMoreButton text={"Xem thêm"} onClick={() => dispatch(loadMoreData())} />
-    </div> 
+      <LoadMoreButton
+        text={"Xem thêm"}
+        onClick={() => dispatch(loadMoreData())}
+      />
+    </div>
   );
-};
-InvoiceList.propTypes = {
-  invoices: PropTypes.array.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };
 
 export default InvoiceList;

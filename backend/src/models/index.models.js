@@ -12,6 +12,10 @@ User.hasMany(Order, { foreignKey: 'employeeId' })
 
 // models/Order.js
 Order.hasMany(OrderDetail, { foreignKey: 'orderId' })
+Order.belongsTo(User, {
+  foreignKey: 'employeeId',
+  as: 'employee'
+});
 OrderDetail.belongsTo(Order, { foreignKey: 'orderId' })
 
 // models/Product.js

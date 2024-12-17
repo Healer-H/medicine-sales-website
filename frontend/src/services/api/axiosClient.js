@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import handleError from "../utils/handleError";
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // Đọc từ .env
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
