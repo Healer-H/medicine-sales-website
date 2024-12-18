@@ -127,12 +127,23 @@ class UserServices {
     }
   }
 
-  async getAllUser() {
+  async getAllUser(page, limit) {
     try {
-      const users = await User.findAll({
+      const offset = (page - 1) * limit
+      const users = await User.findAndCountAll({
         attributes: { exclude: ['password'] },
+        offset,
+        limit,
       })
-      return users
+      return {
+        success: true,
+        data: {
+          totalPages: Math.ceil(users.count / limit),
+          totalRows: users.count,
+          currentPage: page,
+          users: users.rows,
+        },
+      }
     } catch (error) {
       throw new Error(`Get all user service error: ${error}`)
     }
@@ -140,7 +151,7 @@ class UserServices {
 
   async createUser(userData) {
     try {
-      const { email, password, ...userInfo } = userData
+      const { email, ...userInfo } = userData
       const isUserExist = await User.findOne({ where: { email } })
       if (isUserExist) {
         return {
@@ -149,12 +160,28 @@ class UserServices {
         }
       }
 
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+      // Remove diacritics from username
+      let username = userInfo.username
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '')
+      // Generate random password
+      const randomPassword = `${username}${Math.floor(Math.random() * 10000)}`
+      const hashedPassword = await bcrypt.hash(randomPassword, SALT_ROUNDS)
       const user = await User.create({
         email,
         password: hashedPassword,
         ...userInfo,
       })
+
+      // Send email with the random password
+      await sendMail({
+        to: email,
+        subject: 'Account Created',
+        title: 'Your account has been created',
+        message: `Your account has been created successfully. Your password is: ${randomPassword}`,
+      })
+
       return {
         success: true,
         message: Messages.USERS_MESSAGES.ADMIN.USER.CREATE.SUCCESS,
@@ -282,7 +309,7 @@ class UserServices {
       throw new Error(`Delete all users service error: ${error}`)
     }
   }
-  
+
   async getProfile(userId) {
     try {
       const user = await User.findByPk(userId, {

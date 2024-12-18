@@ -5,7 +5,12 @@ const handleError = (error) => {
     const { status, data } = error.response;
     console.log(error.response);
     console.error(`Error ${status}: ${data.error}`);
-    return data.error || data.message || "Lỗi logic ở frontend hoặc backend";
+    if (Array.isArray(data.errors)) {
+      return (
+        data.errors.map((err) => err.msg).join(", ") || "Something went wrong!"
+      );
+    }
+    return data.error || data.message || "Something went wrong!";
   }
   return "Server lỗi trong quá trình xử lý!";
 };

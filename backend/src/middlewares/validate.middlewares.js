@@ -43,7 +43,7 @@ const validateProperties = allowedProperties => {
 // SPECIFIC VALIDATORS
 const validateLogin = [...validateEmail]
 
-const validateCreateUser = [...validateEmail, ...validatePassword()]
+const validateCreateUser = [...validateEmail]
 
 const validateForgotPassword = [...validateEmail]
 
@@ -160,7 +160,6 @@ const validateProduct = [
   },
 ]
 
-
 const validateTopSellingDates = [
   query('startDate')
     .isDate({ format: 'YYYY-MM-DD' })
@@ -183,22 +182,28 @@ const validateTopSellingDates = [
       const oneYearLater = new Date(startDate)
       oneYearLater.setFullYear(oneYearLater.getFullYear() + 1)
       if (new Date(endDate) > oneYearLater) {
-        throw new Error(Messages.PRODUCTS_MESSAGES.TOP_SELLING.DATE_RANGE_TOO_LARGE)
+        throw new Error(
+          Messages.PRODUCTS_MESSAGES.TOP_SELLING.DATE_RANGE_TOO_LARGE,
+        )
       }
     }
     return true
   }),
   // Ngày kết thúc không được lớn hơn ngày hiện tại
-  query('endDate').custom((endDate) => {
+  query('endDate').custom(endDate => {
     if (endDate && new Date(endDate) > new Date()) {
-      throw new Error(Messages.PRODUCTS_MESSAGES.TOP_SELLING.END_DATE_EXCEEDS_CURRENT)
+      throw new Error(
+        Messages.PRODUCTS_MESSAGES.TOP_SELLING.END_DATE_EXCEEDS_CURRENT,
+      )
     }
     return true
   }),
   (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(HttpStatusCodes.BAD_REQUEST).json({ errors: errors.array() })
+      return res
+        .status(HttpStatusCodes.BAD_REQUEST)
+        .json({ errors: errors.array() })
     }
     next()
   },

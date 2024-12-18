@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import userService from '../services/api/userService'; // Import hàm login từ api.js
+import { useNavigate, Link } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import userService from '../services/api/userService';
 import Cookies from 'js-cookie';
+import { Paths } from '../constants/paths'
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,74 +26,96 @@ const Login = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left section */}
-      <div className="flex-1 bg-gradient-to-b from-blue-400 to-blue-500 text-white flex flex-col justify-center items-center">
-        <h1 className="text-5xl font-bold mb-4">Hi, Welcome! 👋</h1>
-        <p className="text-lg text-center">
-          Make your design looks more attractive with 3D abstract geometric digital art.
-        </p>
-      </div>
+<div className="hidden md:flex md:w-1/3 bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300 text-white flex-col justify-center items-center p-12">
+{/* ...existing logo and text... */}
+  <div className="max-w-md text-center">
+    <img 
+      src="/images/transparent_logo.svg" 
+      alt="VitalCare Logo" 
+      className="w-32 h-32 mx-auto mb-8" // Adjusted size and margin
+    />
+    <h1 className="text-5xl font-bold mb-4">VitalCare</h1>
+    <p className="text-xl">Chăm sóc sức khỏe của bạn là trách nhiệm của chúng tôi</p>
+  </div>
+</div>
 
       {/* Right section */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-6">Đăng nhập</h2>
-          <form className="space-y-4" onSubmit={handleLogin}>
+      <div className="flex-1 flex items-center justify-center p-8 bg-gray-50">
+      <div className="w-full max-w-md">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Đăng nhập</h2>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleLogin}>
             {/* Email/Username */}
-            <div>
-              <label htmlFor="email" className="block text-gray-700">Địa chỉ email hoặc tên người dùng</label>
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Địa chỉ email hoặc tên người dùng
+              </label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email hoặc tên người dùng"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                required
               />
             </div>
 
             {/* Password */}
-            <div className="relative">
-              <label htmlFor="password" className="block text-gray-700">Mật khẩu</label>
-              <input
-                type={passwordVisible ? 'text' : 'password'}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mật khẩu"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-              <button
-                type="button"
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                onClick={() => setPasswordVisible(!passwordVisible)}
-              >
-              </button>
+            <div className="space-y-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Mật khẩu
+              </label>
+              <div className="relative">
+                <input
+                  type={passwordVisible ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Mật khẩu"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                >
+                  {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
             </div>
 
-            {/* Remember Me */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
-              />
-              <label htmlFor="remember" className="ml-2 text-gray-700">Ghi nhớ đăng nhập</label>
+            {/* Remember Me and Forgot Password */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
+                />
+                <label htmlFor="remember" className="ml-2 text-sm text-gray-700">
+                  Ghi nhớ đăng nhập
+                </label>
+              </div>
+              <Link to={Paths.FORGOT_PASSWORD} className="text-sm text-blue-500 hover:underline">
+                Quên mật khẩu?
+              </Link>
             </div>
-
-            {/* Forgot Password */}
-            <div className="text-right">
-              <a href="#" className="text-sm text-blue-500 hover:underline">Quên mật khẩu</a>
-            </div>
-
-            {/* Error Message */}
-            {error && <div className="text-red-500 text-sm">{error}</div>}
 
             {/* Login Button */}
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-lg transition"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
             >
               Đăng nhập
             </button>

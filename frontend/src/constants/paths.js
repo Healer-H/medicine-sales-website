@@ -1,5 +1,6 @@
 const Paths = {
   LOGIN: "/login",
+  FORGOT_PASSWORD: "/forgot-password",
   DASHBOARD: "/",
   PRODUCTS: "/product",
   CREATE_PRODUCT: "/product/create",
