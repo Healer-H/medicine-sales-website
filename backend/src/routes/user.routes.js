@@ -77,7 +77,7 @@ const {
 /**
  * @swagger
  * /user/reset-password:
- *   post:
+ *   patch:
  *     summary: Đặt lại mật khẩu
  *     tags: [User]
  *     requestBody:
@@ -636,19 +636,19 @@ Router.post(
   validateRequest,
   userControllers.login,
 )
-Router.post(Path.User.Logout, authentication, userControllers.logout)
 Router.post(
   Path.User.ForgotPassword,
   validateForgotPassword,
   validateRequest,
   userControllers.forgotPassword,
 )
-Router.post(
+Router.patch(
   Path.User.ResetPassword,
   validateResetPassword,
   validateRequest,
   userControllers.resetPassword,
 )
+Router.post(Path.User.Logout, authentication, userControllers.logout)
 Router.get(Path.User.GetProfile, authentication, userControllers.getProfile)
 
 Router.use(authentication, authorization)

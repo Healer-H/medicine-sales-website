@@ -22,6 +22,7 @@ const apiRoutes = {
     PutUser: "/admin/user/:id",
     PatchUser: "/admin/user/:id",
     DeleteUser: "/admin/user/:id",
+    DeleteMultipleUsers: "/admin/users/delete-multiple-users",
   },
   Order: {
     AddProductToOrder: "/orders/add-product-to-order",

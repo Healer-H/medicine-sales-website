@@ -67,7 +67,9 @@ class UserControllers {
 
   async getAllUser(req, res, next) {
     try {
-      const users = await userServices.getAllUser()
+      const page = parseInt(req.query.page) || 1
+      const limit = parseInt(req.query.limit) || 2
+      const users = await userServices.getAllUser(page, limit)
       return res.status(HttpStatusCodes.OK).json(users)
     } catch (error) {
       next(error)
@@ -76,6 +78,7 @@ class UserControllers {
 
   async createUser(req, res, next) {
     try {
+      console.log(req.body)
       const response = await userServices.createUser(req.body)
       if (!response.success)
         return res
@@ -171,7 +174,7 @@ class UserControllers {
       next(error)
     }
   }
-  
+
   async getProfile(req, res, next) {
     try {
       const userId = req.user.id

@@ -18,6 +18,7 @@ import store from "./store/store";
 import InvoiceDetail from "./components/InvoiceDetail";
 import EmployeeDetailTabs from "./components/EmployeeDetailTabs";
 import LoginPage from "./pages/LoginPage";
+import ForgotPassword from "./pages/ForgotPassword";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import NotFound from "./pages/NotFound";
 import { ConfirmationDialogProvider } from "./providers/ConfirmationDialogProvider";
@@ -34,6 +35,7 @@ const App = () => {
         >
           <Routes>
             <Route path={Paths.LOGIN} element={<LoginPage />} />
+            <Route path={Paths.FORGOT_PASSWORD} element={<ForgotPassword />} />
             <Route
               path="*"
               element={
