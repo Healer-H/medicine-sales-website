@@ -1,0 +1,28 @@
+services:
+  backend:
+    image: minhhieuhuynh/medicine-sales-website-backend:latest
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+
+  frontend:
+    image: minhhieuhuynh/medicine-sales-website-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
