@@ -4,7 +4,7 @@ const Paths = {
   PRODUCTS: "/product",
   CREATE_PRODUCT: "/product/create",
   PRODUCT_DETAIL: "/product/:id",
-  INVOICES: "/invoice",
+  INVOICES: "invoice",
   INVOICE_DETAIL: "/invoice/:id",
   EMPLOYEES: "/employee",
   EMPLOYEE_DETAIL: "/employee/:id",
@@ -12,6 +12,7 @@ const Paths = {
   PRESCRIPTIONS: "/prescription",
   ACCOUNT: "/account",
   SETTINGS: "/setting",
+  NOT_FOUND: "*",
 };
 
 const PathTranslations = {

@@ -48,3 +48,6 @@ temp/
 .DS_Store
 *.pem
 backend/package-lock.json
+
+# Vite
+/frontend/.vite

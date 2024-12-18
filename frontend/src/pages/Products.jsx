@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Paths } from "../constants/paths"
+import { Paths } from "../constants/paths";
 import ProductCard from "../components/ProductCard";
 import ProductRow from "../components/ProductRow";
 import LoadMoreButton from "../components/LoadMoreButton";
 import CrudButton from "../components/CrudButton";
 import Spinner from "../components/Spinner";
 import SearchBar from "../components/SearchBar"; // Import SearchBar
+import { useConfirmationDialog } from "../hooks/useConfirmationDialog";
 import { IoGridOutline } from "react-icons/io5";
 import { FaList } from "react-icons/fa6";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -32,9 +33,14 @@ const categories = [
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { viewMode, products, selectedProducts, selectedCategory, loading, error } = useSelector((state) => state.products);
-  const [searchQuery, setSearchQuery] = useState("");
-
+  const {
+    viewMode,
+    products,
+    selectedProducts,
+    selectedCategory,
+    loading,
+    error,
+  } = useSelector((state) => state.products);
   useEffect(() => {
     dispatch(fetchInitialProducts());
   }, [dispatch]);
@@ -52,45 +58,51 @@ const Products = () => {
   };
 
   const handleSearch = (query) => {
-    setSearchQuery(searchQuery);
-    if (searchQuery === "") {
+    if (!query.trim()) {
       dispatch(fetchInitialProducts());
       return;
     }
-
-    const filteredProducts = products.filter((product) => {
-      const matchesCategory = selectedCategory === "Tất cả" || product.category === selectedCategory;
-      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-
-    if (filteredProducts.length > 0) {
-      // Update the state with filtered products
-      dispatch(fetchInitialProducts.fulfilled({ products: filteredProducts }));
-    } else {
-      // Fetch products from API
-      dispatch(searchProducts(searchQuery)).unwrap().catch((error) => {
-        console.error("Failed to search products: ", error);
-      });
-    }
+    query = query.trim();
+    clearTimeout(window.searchTimeout);
+    window.searchTimeout = setTimeout(() => {
+      dispatch(searchProducts(query));
+    }, 500);
   };
-
   const handleDeleteProduct = (productId) => {
-    dispatch(deleteProduct(productId)).unwrap().catch((error) => {
-      console.error("Failed to delete product: ", error);
-    });
+    dispatch(deleteProduct(productId))
+      .unwrap()
+      .catch((error) => {
+        console.error("Failed to delete product: ", error);
+      });
   };
 
+    const handleDeleteSelected = async () => {
+      const result = await confirm({
+        title: "Xác nhận xóa",
+        message: "Bạn có chắc chắn muốn xóa các sản phẩm đã chọn không?",
+        confirmText: "Xóa",
+        cancelText: "Hủy",
+      });
+      if (result) {
+        const selectedProducts = invoices
+          .filter((invoice) => invoice.isSelected)
+          .map((invoice) => invoice.id);
+        dispatch(deleteMultipleInvoices(selectedProducts));
+      }
+    };
   // Filter products based on selected category and search query
+  
   const filteredProducts = products.filter((product) => {
-    console.log(product)
-    const matchesCategory = 
-      selectedCategory === "Tất cả" || 
-      product.category === (
-        selectedCategory === "Dược phẩm" ? "duoc-pham" :
-        selectedCategory === "Thiết bị y tế" ? "thiet-bi-y-te" :
-        selectedCategory === "Chăm sóc cá nhân" ? "cham-soc" : ""
-      );
+    const matchesCategory =
+      selectedCategory === "Tất cả" ||
+      product.category ===
+        (selectedCategory === "Dược phẩm"
+          ? "duoc-pham"
+          : selectedCategory === "Thiết bị y tế"
+            ? "thiet-bi-y-te"
+            : selectedCategory === "Chăm sóc cá nhân"
+              ? "cham-soc"
+              : "");
     return matchesCategory;
   });
 
@@ -100,7 +112,7 @@ const Products = () => {
 
   return (
     <div>
-      <div className="grid grid-rows-2 py-1">
+      <div className="grid grid-rows-3 py-1">
         <div className="flex justify-between">
           <div className="flex items-center space-x-4 mb-4">
             {categories.map((category) => (
@@ -142,7 +154,7 @@ const Products = () => {
               text={"Tạo sản phẩm mới"}
               onClick={handleCreateProduct}
             />
-          </divk>
+          </div>
         </div>
         <div className="mb-1">
           <div className="flex justify-between items-center mb-4">
@@ -164,10 +176,14 @@ const Products = () => {
                 <input
                   type="checkbox"
                   className="mr-2 w-5 h-5"
-                  checked={selectedProducts.length !== 0 && selectedProducts.length === filteredProducts.length}
+                  checked={
+                    selectedProducts.length !== 0 &&
+                    selectedProducts.length === filteredProducts.length
+                  }
                   onChange={() => {}}
                 />
-                {selectedProducts.length !== 0 && selectedProducts.length === filteredProducts.length
+                {selectedProducts.length !== 0 &&
+                selectedProducts.length === filteredProducts.length
                   ? "Bỏ chọn tất cả"
                   : "Chọn tất cả"}
               </button>
@@ -189,44 +205,42 @@ const Products = () => {
             )}
           </div>
         </div>
+        <div>
+          <SearchBar
+            placeholder="Tìm kiếm sản phẩm..."
+            onSearch={handleSearch}
+          />
+        </div>
       </div>
 
-      <SearchBar onSearch={handleSearch} />
-      {!loading && error && (
-        <div className="text-red-500 text-center">{error}</div>
-      )}
-      {!loading && !error && (
-        <>
-          <hr className="mb-2" />
-          <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
-            {filteredProducts.map((product) =>
-              viewMode === "grid" ? (
-                <ProductCard
-                  key={product.product_id}
-                  product={product}
-                  isSelected={selectedProducts.includes(product.product_id)}
-                  onSelect={handleSelectProduct}
-                />
-              ) : (
-                <ProductRow
-                  key={product.product_id}
-                  product={product}
-                  isSelected={selectedProducts.includes(product.product_id)}
-                  onSelect={handleSelectProduct}
-                />
-              )
-            )}
-          </div>
-          {filteredProducts.length === 0 && (
-            <div className="text-center text-gray-500">Không có sản phẩm nào</div>
-          )}
-          {filteredProducts.length > 0 && (
-            <LoadMoreButton
-              text={"Xem thêm"}
-              onClick={() => dispatch(loadMoreData())}
+      <hr className="mb-2" />
+      <div className={`grid ${viewMode === "grid" ? "grid-cols-4 gap-4" : ""}`}>
+        {filteredProducts.map((product) =>
+          viewMode === "grid" ? (
+            <ProductCard
+              key={product.product_id}
+              product={product}
+              isSelected={selectedProducts.includes(product.product_id)}
+              onSelect={handleSelectProduct}
             />
-          )}
-        </>
+          ) : (
+            <ProductRow
+              key={product.product_id}
+              product={product}
+              isSelected={selectedProducts.includes(product.product_id)}
+              onSelect={handleSelectProduct}
+            />
+          )
+        )}
+      </div>
+      {filteredProducts.length === 0 && (
+        <div className="text-center text-gray-500">Không có sản phẩm nào</div>
+      )}
+      {filteredProducts.length > 0 && (
+        <LoadMoreButton
+          text={"Xem thêm"}
+          onClick={() => dispatch(loadMoreData())}
+        />
       )}
     </div>
   );
