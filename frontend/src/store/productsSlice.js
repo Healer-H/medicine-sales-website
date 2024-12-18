@@ -63,11 +63,11 @@ export const updateProduct = createAsyncThunk(
   },
 );
 
-export const searchProducts = createAsyncThunk(
+export const  searchProducts = createAsyncThunk(
   "products/searchProducts",
   async (query, { rejectWithValue }) => {
     try {
-      const response = await productService.search({ query });
+      const response = await productService.search({ q: query });
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -169,12 +169,13 @@ const productsSlice = createSlice({
       })
       // searchProducts
       .addCase(searchProducts.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
         state.error = null;
       })
       .addCase(searchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload.products || [];
+        console.log('dmm', action.payload);
+        state.products = action.payload;
       })
       .addCase(searchProducts.rejected, (state, action) => {
         state.loading = false;

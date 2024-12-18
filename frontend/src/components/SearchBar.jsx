@@ -1,25 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import debounce from 'lodash/debounce';
+import { Input, Spin } from 'antd';
+import { SearchOutlined, CloseOutlined } from '@ant-design/icons';
 
-const SearchBar = ({ onSearch }) => {
-    const [query, setQuery] = useState('');
+const SearchBar = ({ placeholder, onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleInputChange = (e) => {
-        const newQuery = e.target.value;
-        setQuery(newQuery);
-        onSearch(newQuery); // Call onSearch immediately
-    };
+  const debouncedSearch = useCallback(
+    debounce(async (query) => {
+      if (query) {
+        setIsLoading(true);
+        await onSearch(query);
+        setIsLoading(false);
+      }
+    }, 500),
+    []
+  );
 
-    return (
-        <div>
-            <input
-                type="text"
-                value={query}
-                onChange={handleInputChange}
-                placeholder="Tìm kiếm..."
-                className="border rounded-lg py-2 px-4 text-sm w-64"
-            />
-        </div>
-    );
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    onSearch('');
+  };
+
+  return (
+    <div className="search-box-container">
+      <Input
+        placeholder={placeholder}
+        value={searchTerm}
+        onChange={handleChange}
+        prefix={<SearchOutlined />}
+        suffix={
+          isLoading ? (
+            <Spin size="small" />
+          ) : (
+            searchTerm && (
+              <CloseOutlined onClick={handleClear} style={{ cursor: 'pointer' }} />
+            )
+          )
+        }
+        style={{ width: 300 }}
+      />
+    </div>
+  );
 };
 
 export default SearchBar;

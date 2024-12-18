@@ -40,7 +40,7 @@ class ProductService {
 
   // Lấy danh sách sản phẩm
   // Lấy danh sách sản phẩm với phân trang
-  async getAllProducts(page = 1, limit = 10) {
+  async getAllProducts(page = 1, limit = 12) {
     try {
       const offset = (page - 1) * limit
       const { count, rows: products } = await Product.findAndCountAll({
