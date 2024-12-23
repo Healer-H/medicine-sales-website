@@ -1,10 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
-import dashboardReducer from './dashboardSlice'
-import productsReducer from './productsSlice'
-import invoiceReducer from './invoiceSlice'
-import employeeReducer from './employeeSlice'
-import prescriptionReducer from './prescriptionSlice'
-import headerReducer from './headerSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import dashboardReducer from "./dashboardSlice";
+import productsReducer from "./productsSlice";
+import invoiceReducer from "./invoiceSlice";
+import employeeReducer from "./employeeSlice";
+import prescriptionReducer from "./prescriptionSlice";
+import headerReducer from "./headerSlice";
+import userReducer from "./userSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
     employees: employeeReducer,
     prescriptions: prescriptionReducer,
     header: headerReducer,
+    user: userReducer,
   },
-})
+});
 
-export default store
+export default store;

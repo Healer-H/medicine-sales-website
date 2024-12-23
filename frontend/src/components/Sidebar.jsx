@@ -32,7 +32,7 @@ const Sidebar = () => {
     e.preventDefault();
     try {
       Cookies.remove("access_token");
-      window.location.href = Paths.LOGIN;
+      navigate(Paths.LOGIN);
     } catch (error) {
       console.error("Logout failed:", error);
     }
