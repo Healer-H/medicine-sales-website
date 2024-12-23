@@ -24,25 +24,25 @@ const ProductDetailPage = () => {
         <div className="flex justify-between w-full space-x-4 mb-4">
           <button
             onClick={() => setActiveTab('basic')}
-            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'basic' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'basic' ? 'bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white' : 'bg-gray-200'}`}
           >
             Thông tin cơ bản
           </button>
           <button
             onClick={() => setActiveTab('detailed')}
-            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'detailed' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'detailed' ? 'bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white' : 'bg-gray-200'}`}
           >
             Thông tin chi tiết
           </button>
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'inventory' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'inventory' ? 'bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white' : 'bg-gray-200'}`}
           >
             Quản lý đợt nhập 
           </button>
           <button
             onClick={() => setActiveTab('others')}
-            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'others' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 w-1/4 rounded-md ${activeTab === 'others' ? 'bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white' : 'bg-gray-200'}`}
           >
             Thông tin khác
           </button>
@@ -124,7 +124,21 @@ const DetailedInformation = () => {
       <div className="col-span-2">
         <div className='flex justify-between'>
         <label>Thành phần</label>
-        <button className="bg-white border-2 border-blue-500 text-blue-500 px-4 py-2 rounded-md ml-2">Tải lên file Excel</button>
+        <button className="relative bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white px-4 py-2 rounded-md overflow-hidden">
+          Tải lên file Excel
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            onChange={(e) => {
+              // Handle Excel file upload logic here
+              const file = e.target.files[0];
+              if (file) {
+                console.log("Excel file uploaded:", file.name);
+              }
+            }}
+          />
+        </button>
         </div>
         <div className="mt-4">
           {components.map((component, index) => (
@@ -209,7 +223,21 @@ const InventoryManagement = () => {
         </div>
         <div className="col-span-2">
           <label>Danh sách đợt nhập</label>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2">Tải lên file Excel</button>
+          <button className="relative bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white px-4 py-2 rounded-md overflow-hidden ml-2">
+            Tải lên file Excel
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              className="absolute inset-0 opacity-0 cursor-pointer"
+              onChange={(e) => {
+                // Handle Excel file upload logic here
+                const file = e.target.files[0];
+                if (file) {
+                  console.log("Excel file uploaded:", file.name);
+                }
+              }}
+            />
+          </button>
           <div className="mt-4">
             <input type="text" placeholder="Ngày nhập" className="border w-full p-2 rounded-md mb-2" />
             <input type="text" placeholder="Số lượng nhập" className="border w-full p-2 rounded-md mb-2" />
@@ -234,7 +262,21 @@ const OtherInformation = () => {
       </div>
       <div flex items-center>
         <label>Chứng chỉ chất lượng</label>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2">Tải lên file PDF</button>
+        <button className="relative bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white px-4 py-2 rounded-md overflow-hidden ml-2">
+          Tải lên file PDF
+          <input
+            type="file"
+            accept=".pdf"
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            onChange={(e) => {
+              // Handle PDF file upload logic here
+              const file = e.target.files[0];
+              if (file) {
+                console.log("PDF file uploaded:", file.name);
+              }
+            }}
+          />
+        </button>
       </div>
       <div className="col-span-2">
         <label>Ghi chú nội bộ</label>
