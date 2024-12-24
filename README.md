@@ -102,7 +102,7 @@ npm run dev
 cd ..
 ```
 
-3. Cài đặt dependencies ở frontend/
+4. Cài đặt dependencies ở frontend/
 
 ```bash
 cd frontend/
@@ -111,4 +111,9 @@ npm run dev
 cd ..
 ```
 
-## Deployment (đang thử nghiệm)
+## Deployment
+
+- Frontend: https://medicine-vitalcare.vercel.app/
+- Backend: https://medicine-vitalcare-backend.up.railway.app/api-docs/
+- Database: Deployed MySQL on Aiven 
+
