@@ -4,9 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../../utils/formatData"
 const ProductRow = ({ product, isSelected, onSelect }) => {
   const navigate = useNavigate();
-  const handleRowClick = () => {
-    navigate(`/product/${product.product_id}`);
-  }
+
+  const handleRowClick = (e) => {
+    if (e.target.type !== "checkbox") {
+      navigate(`/product/${product.product_id}`);
+    }
+  };
+
   return (
     <div className="flex items-center bg-white shadow-md rounded-md p-4 mb-2 hover:bg-blue-100"
       onClick={handleRowClick}>
