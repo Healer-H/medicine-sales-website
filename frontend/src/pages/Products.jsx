@@ -121,7 +121,7 @@ const Products = () => {
                 onClick={() => dispatch(setSelectedCategory(category.name))}
                 className={`px-4 py-1 rounded-md ${
                   selectedCategory === category.name
-                    ? "bg-blue-500 text-white"
+                    ? "bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white"
                     : "bg-gray-200 text-gray-600"
                 }`}
               >
@@ -134,7 +134,7 @@ const Products = () => {
               <button
                 onClick={() => dispatch(setViewMode("grid"))}
                 className={`p-2 rounded-md ${
-                  viewMode === "grid" ? "bg-blue-500 text-white" : "bg-gray-200"
+                  viewMode === "grid" ? "bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white" : "bg-gray-200"
                 }`}
               >
                 <IoGridOutline />
@@ -142,7 +142,7 @@ const Products = () => {
               <button
                 onClick={() => dispatch(setViewMode("list"))}
                 className={`p-2 rounded-md ${
-                  viewMode === "list" ? "bg-blue-500 text-white" : "bg-gray-200"
+                  viewMode === "list" ? "bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white" : "bg-gray-200"
                 }`}
               >
                 <FaList />
@@ -171,7 +171,7 @@ const Products = () => {
                     );
                   }
                 }}
-                className="px-4 py-1 rounded-md bg-blue-500 text-white flex items-center"
+                className="px-4 py-1 rounded-md bg-gradient-to-r from-[#6CBCFD] to-[#468EFD] text-white flex items-center"
               >
                 <input
                   type="checkbox"
