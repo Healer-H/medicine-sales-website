@@ -189,6 +189,8 @@ class UserServices {
           id: user.id,
           username: user.username,
           email: user.email,
+          role: user.role,
+          isActive: user.isActive,
         },
       }
     } catch (error) {
@@ -279,6 +281,7 @@ class UserServices {
       await user.update({ ...userData })
       return {
         success: true,
+        userId: user.id,
         message: Messages.USERS_MESSAGES.ADMIN.USER.UPDATE.SUCCESS,
       }
     } catch (error) {

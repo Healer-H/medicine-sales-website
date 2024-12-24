@@ -18,8 +18,8 @@ const EmployeeList = ({ employees, onEdit, onDelete }) => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-md overflow-hidden">
-      <table className="w-full">
+    <div>
+      <table className="w-full bg-white shadow-md rounded-md overflow-hidden">
         <thead>
           <tr className="bg-blue-500 text-white">
             <th className="p-2">
@@ -42,26 +42,26 @@ const EmployeeList = ({ employees, onEdit, onDelete }) => {
         <tbody>
           {employees.map((employee) => (
             <tr key={employee.id} className="border-b hover:bg-gray-50">
-              <td className="p-2">
+              <td className="p-2 text-center">
                 <input
                   type="checkbox"
                   checked={employee.isSelected}
                   onChange={() => dispatch(toggleSelectEmployee(employee.id))}
                 />
               </td>
-              <td className="p-2">{employee.username}</td>
-              <td className="p-2">{employee.email}</td>
-              <td className="p-2">{employee.role}</td>
-              <td className={`p-2 ${
-                employee.isActive == 1
+              <td className="p-2 text-center">{employee.username}</td>
+              <td className="p-2 text-center">{employee.email}</td>
+              <td className="p-2 text-center">{employee.role}</td>
+              <td className={`p-2 text-center ${
+                employee.isActive == true
                   ? "text-green-500"
-                  : employee.isActive == 0
-                  ? "text-yellow-500" 
-                  : "text-red-500"
+                  : "text-yellow-500"
               }`}>
-                {employee.isActive}
+                {employee.isActive == true
+                  ? "đang hoạt động"
+                  : "khóa tạm thời"}
               </td>
-              <td className="p-2 space-x-2">
+              <td className="p-2 text-center space-x-1">
                 <button
                   onClick={() => onEdit(employee.id)}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-md"

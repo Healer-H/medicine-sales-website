@@ -54,7 +54,8 @@ export const createUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await userService.createUser(userData);
-      return response.data;
+      console.log(response);
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -66,7 +67,7 @@ export const updateUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await userService.patchUser(userData.id, userData);
-      return response.data;
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -141,21 +142,33 @@ const employeeSlice = createSlice({
       .addCase(deleteMultipleEmployees.rejected, (state, action) => {
         state.error = action.payload;
       })
+      .addCase(createUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(createUser.fulfilled, (state, action) => {
-        state.employees.push(action.payload);
+        state.loading = false;
+        state.employees.push(action.payload.user);
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
         const index = state.employees.findIndex(
           (employee) => employee.id === action.payload.id,
         );
         if (index !== -1) {
-          state.employees[index] = action.payload;
+          state.employees[index] = action.payload.userData;
         }
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },

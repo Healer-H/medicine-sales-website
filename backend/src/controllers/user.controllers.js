@@ -142,7 +142,11 @@ class UserControllers {
         return res
           .status(HttpStatusCodes.NOT_FOUND)
           .json({ message: response.message })
-      res.status(HttpStatusCodes.OK).json({ message: response.message })
+      res.status(HttpStatusCodes.OK).json({
+        id: response.userId,
+        userData: req.body,
+        message: response.message,
+      })
     } catch (error) {
       next(error)
     }

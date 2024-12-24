@@ -88,9 +88,8 @@ const EmployeeForm = ({ employee, onCancel }) => {
           onChange={handleChange}
           className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md"
         >
-          <option value="true">Đang hoạt động</option>
-          <option value="false">Khóa tạm thời</option>
-          <option value="false">Khóa vĩnh viễn</option>
+          <option value="1">Đang hoạt động</option>
+          <option value="0">Khóa tạm thời</option>
         </select>
       </div>
       <div className="flex justify-end space-x-4">
