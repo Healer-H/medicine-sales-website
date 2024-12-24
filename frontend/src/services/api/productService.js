@@ -1,4 +1,3 @@
-// src/services/api/authService.js
 import axiosClient from "./axiosClient";
 import apiRoutes from "../constants/apiRoutes";
 
@@ -14,6 +13,16 @@ const productService = {
   search: (q) => axiosClient.get(apiRoutes.Product.Search, { params: q }),
   getExpired: () => axiosClient.get(apiRoutes.Product.GetExpired),
   getLowStock: () => axiosClient.get(apiRoutes.Product.GetLowStock),
+  importProducts: (formData) =>
+    axiosClient.post(apiRoutes.Product.Import, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
+  exportProducts: () =>
+    axiosClient.get(apiRoutes.Product.Export, {
+      responseType: "blob",
+    }),
 };
 
 export default productService;

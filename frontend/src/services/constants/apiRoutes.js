@@ -14,6 +14,8 @@ const apiRoutes = {
     Search: "/products/search",
     GetExpired: "/products/get-expired",
     GetLowStock: "/products/get-low-stock",
+    Import: "/products/import",
+    Export: "/products/export",
   },
   Admin: {
     GetAllUser: "/admin/users",

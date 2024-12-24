@@ -64,11 +64,43 @@ export const updateProduct = createAsyncThunk(
   },
 );
 
-export const  searchProducts = createAsyncThunk(
+export const searchProducts = createAsyncThunk(
   "products/searchProducts",
   async (query, { rejectWithValue }) => {
     try {
       const response = await productService.search({ q: query });
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const importProducts = createAsyncThunk(
+  "products/importProducts",
+  async (file, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await productService.importProducts(formData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const exportProducts = createAsyncThunk(
+  "products/exportProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await productService.exportProducts();
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "products.xlsx");
+      document.body.appendChild(link);
+      link.click();
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -175,7 +207,7 @@ const productsSlice = createSlice({
       })
       .addCase(searchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('dmm', action.payload);
+        console.log("dmm", action.payload);
         state.products = action.payload;
       })
       .addCase(searchProducts.rejected, (state, action) => {
@@ -192,6 +224,27 @@ const productsSlice = createSlice({
         state.products.unshift(action.payload);
       })
       .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(importProducts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(importProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+      })
+      .addCase(importProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(exportProducts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(exportProducts.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(exportProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

@@ -20,6 +20,8 @@ import {
   deselectProduct,
   deleteProduct,
   searchProducts,
+  importProducts,
+  exportProducts,
 } from "../store/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -89,6 +91,17 @@ const Products = () => {
           .map((invoice) => invoice.id);
         dispatch(deleteMultipleInvoices(selectedProducts));
       }
+    };
+
+    const handleImport = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        dispatch(importProducts(file));
+      }
+    };
+  
+    const handleExport = () => {
+      dispatch(exportProducts());
     };
   // Filter products based on selected category and search query
   
@@ -205,12 +218,28 @@ const Products = () => {
             )}
           </div>
         </div>
+        <div className="flex justify-between items-center mb-4">
+        <div>
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleImport}
+            className="mr-2 p-2 border rounded"
+          />
+          <button
+            onClick={handleExport}
+            className="p-2 bg-blue-500 text-white rounded"
+          >
+            Xuất sản phẩm
+          </button>
+        </div>
         <div>
           <SearchBar
             placeholder="Tìm kiếm sản phẩm..."
             onSearch={handleSearch}
           />
         </div>
+      </div>
       </div>
 
       <hr className="mb-2" />
