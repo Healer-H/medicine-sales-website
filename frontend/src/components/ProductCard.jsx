@@ -7,10 +7,12 @@ import { formatPrice } from '../../utils/formatData';
 const ProductCard = ({ product, onSelect, isSelected }) => {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigate(`/product/${product.name}`);
+  const handleCardClick = (e, invoiceId) => {
+    if (e.target.type !== "checkbox") {
+      navigate(`/product/${product.product_id}`);
+    }
   };
-
+  
   return (
     <div className="bg-white shadow-md rounded-xl p-5 flex flex-col items-center relative hover:bg-blue-100">
       <input

@@ -13,7 +13,6 @@ const InvoiceList = ({ invoices, onView, onDelete }) => {
   const dispatch = useDispatch();
 
   const handleRowClick = (e, invoiceId) => {
-    // Prevent onView from firing when clicking on the checkbox
     if (e.target.type !== "checkbox") {
       onView(invoiceId);
     }
@@ -23,7 +22,7 @@ const InvoiceList = ({ invoices, onView, onDelete }) => {
     <div>
       <table className="w-full bg-white shadow-md rounded-md">
         <thead>
-          <tr className="bg-blue-500 text-white">
+          <tr className="bg-blue-500 text-white ">
             {/* Check All Checkbox */}
             <th className="p-2">
               <input
@@ -36,7 +35,7 @@ const InvoiceList = ({ invoices, onView, onDelete }) => {
                     dispatch(deselectAllInvoices());
                   }
                 }}
-                checked={invoices.every((invoice) => invoice.isSelected)}
+                checked={invoices.length && invoices.every((invoice) => invoice.isSelected)}
               />
             </th>
             <th className="text-center">ID</th>

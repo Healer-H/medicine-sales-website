@@ -6,7 +6,7 @@ const breadcrumbPatterns = [
   { pattern: /^\/$/, name: "Dashboard" },
   { pattern: /^\/product$/, name: "Sản phẩm" },
   { pattern: /^\/product\/create$/, name: "Tạo sản phẩm" },
-  { pattern: /^\/product\/\$/, name: "Chi tiết sản phẩm" },
+  { pattern: /^\/product\/\d+$/, name: "Chi tiết sản phẩm" },
   { pattern: /^\/invoice$/, name: "Hóa đơn" },
   { pattern: /^\/invoice\/\d+$/, name: "Chi tiết hóa đơn" },
   { pattern: /^\/invoice\/\d+\/edit$/, name: "Sửa hóa đơn" },
